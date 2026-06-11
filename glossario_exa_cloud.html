@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossário — EXA Cloud Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ─────────────────────────────────────────────── */
+:root {
+  --blue:        #1A56E8;
+  --blue-mid:    #2F6AF0;
+  --blue-soft:   #EBF1FD;
+  --blue-text:   #1340B8;
+  --purple:      #6D28D9;
+  --purple-soft: #EDE9FE;
+  --green:       #0C7A4E;
+  --green-soft:  #DCFCE7;
+  --amber:       #B45309;
+  --amber-soft:  #FEF3C7;
+  --slate:       #475569;
+  --slate-soft:  #F1F5F9;
+  --ink:         #111827;
+  --ink-2:       #374151;
+  --ink-3:       #6B7280;
+  --ink-4:       #9CA3AF;
+  --line:        #E5E7EB;
+  --line-mid:    #D1D5DB;
+  --bg:          #FFFFFF;
+  --bg-2:        #F9FAFB;
+  --sidebar-w:   220px;
+  --radius:      10px;
+  --radius-sm:   6px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{font-family:'Inter',sans-serif;background:var(--bg-2);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ── TOP BAR ─────────────────────────────────────────────── */
+.topbar{position:fixed;top:0;left:0;right:0;height:52px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 28px;gap:10px;z-index:200}
+.topbar-logo{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--blue);letter-spacing:-.01em}
+.topbar-sep{width:1px;height:16px;background:var(--line-mid)}
+.topbar-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:400;color:var(--ink-3)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.search-wrap{position:relative}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink-4);pointer-events:none}
+.search-wrap input{width:220px;padding:6px 32px 6px 30px;border:1.5px solid var(--line);border-radius:20px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);background:var(--bg-2);outline:none;transition:border-color .15s,width .2s}
+.search-wrap input:focus{border-color:var(--blue);width:270px}
+.search-badge{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--ink-4);pointer-events:none}
+
+/* ── LAYOUT ──────────────────────────────────────────────── */
+.layout{display:flex;padding-top:52px;min-height:100vh}
+
+/* ── SIDEBAR ─────────────────────────────────────────────── */
+.sidebar{width:var(--sidebar-w);flex-shrink:0;position:fixed;top:52px;left:0;bottom:0;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 0 40px;scrollbar-width:thin}
+.sidebar-group{margin-bottom:4px}
+.sidebar-label{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);padding:6px 18px 4px}
+.sb-link{display:flex;align-items:center;gap:9px;padding:7px 18px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink-3);text-decoration:none;cursor:pointer;transition:color .12s,background .12s;position:relative;border:none;background:none;width:100%;text-align:left}
+.sb-link:hover{color:var(--ink);background:var(--bg-2)}
+.sb-link.active{color:var(--blue);background:var(--blue-soft);font-weight:500}
+.sb-link.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--blue);border-radius:0 2px 2px 0}
+.sb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sb-divider{height:1px;background:var(--line);margin:14px 18px}
+
+/* ── CONTENT ─────────────────────────────────────────────── */
+.content{margin-left:var(--sidebar-w);flex:1;padding:40px 48px 80px;max-width:1060px}
+
+/* ── PAGE HEADER ─────────────────────────────────────────── */
+.page-header{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--line)}
+.page-eyebrow{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.page-header h1{font-family:'DM Sans',sans-serif;font-size:28px;font-weight:700;color:var(--ink);letter-spacing:-.025em;line-height:1.2;margin-bottom:10px}
+.page-header p{font-size:14px;color:var(--ink-3);max-width:580px;line-height:1.65}
+.meta-row{display:flex;flex-wrap:wrap;gap:20px;margin-top:18px}
+.meta-item{font-size:12px;color:var(--ink-4)}
+.meta-item strong{color:var(--ink-2);font-weight:500}
+
+/* ── ARCH ────────────────────────────────────────────────── */
+.arch-wrap{margin-bottom:48px}
+.gl-sec-label{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);margin-bottom:14px}
+.arch-box{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:24px 28px}
+.arch-flow{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.arch-node{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 14px}
+.arch-node-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4);margin-bottom:2px}
+.arch-node-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--ink)}
+.arch-node-sub{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-3);margin-top:1px}
+.arch-node.hl{border-color:var(--blue);background:var(--blue-soft)}
+.arch-node.hl .arch-node-name{color:var(--blue-text)}
+.arch-node.hl .arch-node-sub{color:var(--blue)}
+.arch-arrow{font-size:16px;color:var(--line-mid)}
+.arch-note{font-size:13px;color:var(--ink-3);line-height:1.6;border-top:1px solid var(--line);padding-top:14px}
+.arch-note strong{color:var(--ink-2);font-weight:500}
+
+/* ── SECTION ─────────────────────────────────────────────── */
+.gl-section{margin-bottom:48px;scroll-margin-top:72px}
+.gl-sec-header{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.gl-sec-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.gl-sec-title{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4)}
+.gl-sec-line{flex:1;height:1px;background:var(--line)}
+
+/* ── CARDS ───────────────────────────────────────────────── */
+.cards-stack{display:flex;flex-direction:column;gap:10px}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:box-shadow .15s;position:relative}
+.card:hover{box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;transition:width .15s}
+.card:hover::before{width:4px}
+.card[data-cat="aquisicao"]::before{background:var(--blue)}
+.card[data-cat="engajamento"]::before{background:var(--purple)}
+.card[data-cat="adocao"]::before{background:var(--green)}
+.card[data-cat="retencao"]::before{background:var(--amber)}
+.card[data-cat="infra"]::before{background:var(--slate)}
+
+.card-body{padding:18px 22px 18px 26px}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+.card-name{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.01em;line-height:1.3}
+.card-tag{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.card-tag.aquisicao{background:var(--blue-soft);color:var(--blue-text)}
+.card-tag.engajamento{background:var(--purple-soft);color:var(--purple)}
+.card-tag.adocao{background:var(--green-soft);color:var(--green)}
+.card-tag.retencao{background:var(--amber-soft);color:var(--amber)}
+.card-tag.infra{background:var(--slate-soft);color:var(--slate)}
+
+.card-formula-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.card-formula-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4);white-space:nowrap;flex-shrink:0}
+.card-formula{font-family:'DM Mono',monospace;font-size:12px;color:var(--blue-text);background:var(--blue-soft);border-radius:var(--radius-sm);padding:4px 10px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.card-desc{font-size:14px;color:var(--ink-2);line-height:1.65}
+
+.card-toggle{display:flex;align-items:center;gap:5px;margin-top:12px;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--blue);background:none;border:none;padding:0;cursor:pointer;transition:opacity .12s}
+.card-toggle:hover{opacity:.7}
+.card-toggle svg{transition:transform .2s}
+.card-toggle.open svg{transform:rotate(180deg)}
+
+.card-detail{display:none;padding:14px 22px 18px 26px;border-top:1px solid var(--line);background:var(--bg-2)}
+.card-detail.open{display:block}
+.detail-item{margin-bottom:12px}
+.detail-item:last-child{margin-bottom:0}
+.detail-lbl{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-4);margin-bottom:4px}
+.detail-txt{font-size:13px;color:var(--ink-3);line-height:1.65}
+.detail-txt code{font-family:'DM Mono',monospace;font-size:12px;background:var(--blue-soft);color:var(--blue-text);padding:1px 5px;border-radius:3px}
+
+.callout{display:flex;gap:9px;padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;line-height:1.55;margin-top:10px}
+.callout span{flex-shrink:0}
+.callout.info{background:var(--blue-soft);color:var(--blue-text);border-left:2px solid var(--blue)}
+.callout.warn{background:var(--amber-soft);color:var(--amber);border-left:2px solid var(--amber)}
+.callout.ok{background:var(--green-soft);color:var(--green);border-left:2px solid var(--green)}
+
+/* ── EMPTY ───────────────────────────────────────────────── */
+.empty{display:none;text-align:center;padding:60px 0;color:var(--ink-4)}
+.empty.show{display:block}
+.empty p+p{margin-top:6px;font-size:13px}
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.footer{margin-left:var(--sidebar-w);border-top:1px solid var(--line);padding:18px 48px;display:flex;justify-content:space-between;font-size:12px;color:var(--ink-4);background:var(--bg)}
+
+/* ── A11Y ────────────────────────────────────────────────── */
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:3px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+@media(max-width:800px){
+  .sidebar{display:none}
+  .content,.footer{margin-left:0;padding-left:20px;padding-right:20px}
+  .arch-flow{flex-direction:column}
+  .arch-arrow{transform:rotate(90deg)}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <span class="topbar-logo">EXA Cloud</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-title">Glossário do Dashboard</span>
+  <div class="topbar-right">
+    <div class="search-wrap">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Buscar indicador…" aria-label="Buscar indicador">
+      <span class="search-badge" id="searchBadge"></span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" aria-label="Navegação">
+    <div class="sidebar-group">
+      <div class="sidebar-label">Referência</div>
+      <a class="sb-link" href="#sec-arquitetura">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Arquitetura
+      </a>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sidebar-group">
+      <div class="sidebar-label">Seções</div>
+      <a class="sb-link" href="#sec-aquisicao" data-sec="sec-aquisicao">
+        <span class="sb-dot" style="background:var(--blue)"></span>Aquisição
+      </a>
+      <a class="sb-link" href="#sec-engajamento" data-sec="sec-engajamento">
+        <span class="sb-dot" style="background:var(--purple)"></span>Engajamento
+      </a>
+      <a class="sb-link" href="#sec-adocao" data-sec="sec-adocao">
+        <span class="sb-dot" style="background:var(--green)"></span>Adoção
+      </a>
+      <a class="sb-link" href="#sec-retencao" data-sec="sec-retencao">
+        <span class="sb-dot" style="background:var(--amber)"></span>Retenção
+      </a>
+      <a class="sb-link" href="#sec-infra" data-sec="sec-infra">
+        <span class="sb-dot" style="background:var(--slate)"></span>Infra &amp; Dados
+      </a>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sidebar-group">
+      <div class="sidebar-label">Filtrar</div>
+      <button class="sb-link active" onclick="filterCat('all',this)">
+        <span class="sb-dot" style="background:var(--line-mid)"></span>Todos
+      </button>
+      <button class="sb-link" onclick="filterCat('aquisicao',this)">
+        <span class="sb-dot" style="background:var(--blue)"></span>Só Aquisição
+      </button>
+      <button class="sb-link" onclick="filterCat('engajamento',this)">
+        <span class="sb-dot" style="background:var(--purple)"></span>Só Engajamento
+      </button>
+      <button class="sb-link" onclick="filterCat('adocao',this)">
+        <span class="sb-dot" style="background:var(--green)"></span>Só Adoção
+      </button>
+      <button class="sb-link" onclick="filterCat('retencao',this)">
+        <span class="sb-dot" style="background:var(--amber)"></span>Só Retenção
+      </button>
+      <button class="sb-link" onclick="filterCat('infra',this)">
+        <span class="sb-dot" style="background:var(--slate)"></span>Só Infra
+      </button>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-eyebrow">EXA Cloud · Dashboard Analytics</div>
+      <h1>Glossário de Indicadores</h1>
+      <p>Definições de cada indicador presente no dashboard — como é construído, de onde vêm os dados e o que cada campo representa. A análise dos números acontece no dashboard; este glossário é a referência para entendê-los.</p>
+      <div class="meta-row">
+        <div class="meta-item">Período: <strong>Jan/2026 – Atual</strong></div>
+        <div class="meta-item">Fonte primária: <strong>GA4 via BigQuery</strong></div>
+        <div class="meta-item">Fonte secundária: <strong>Google Play + App Store</strong></div>
+        <div class="meta-item">Granularidade: <strong>Diária, agrupada por mês</strong></div>
+      </div>
+    </div>
+
+    <!-- ARQUITETURA -->
+    <div class="arch-wrap gl-section" id="sec-arquitetura">
+      <div class="gl-sec-label">De onde vêm os números</div>
+      <div class="arch-box">
+        <div class="arch-flow">
+          <div class="arch-node">
+            <div class="arch-node-lbl">Origem 1</div>
+            <div class="arch-node-name">Eventos in-app</div>
+            <div class="arch-node-sub">SDK GA4 · Android + iOS</div>
+          </div>
+          <span class="arch-arrow">→</span>
+          <div class="arch-node">
+            <div class="arch-node-lbl">Coleta</div>
+            <div class="arch-node-name">Google Analytics 4</div>
+            <div class="arch-node-sub">Propriedade Firebase/GA4</div>
+          </div>
+          <span class="arch-arrow">→</span>
+          <div class="arch-node hl">
+            <div class="arch-node-lbl">Processamento</div>
+            <div class="arch-node-name">BigQuery</div>
+            <div class="arch-node-sub">fact_cloud_behavior</div>
+          </div>
+          <span class="arch-arrow">→</span>
+          <div class="arch-node hl">
+            <div class="arch-node-lbl">Agregação</div>
+            <div class="arch-node-name">BigQuery</div>
+            <div class="arch-node-sub">aggr_base_instalada_cloud</div>
+          </div>
+          <span class="arch-arrow">→</span>
+          <div class="arch-node">
+            <div class="arch-node-lbl">Visualização</div>
+            <div class="arch-node-name">Looker Studio</div>
+            <div class="arch-node-sub">Dashboard EXA Cloud</div>
+          </div>
+        </div>
+        <div class="arch-note">
+          <strong>Origem 2 — Dados de Loja (Google Play + App Store):</strong> planilha com downloads e desinstalações iOS, alimentada manualmente. Entra no dashboard via blend (combinação de fontes no Looker Studio). O iOS recebe tratamento separado porque o sistema iOS não permite que o app envie eventos de remoção — a única fonte disponível para desinstalações iOS são os relatórios da Apple.
+        </div>
+      </div>
+    </div>
+
+    <!-- AQUISIÇÃO -->
+    <div class="gl-section" id="sec-aquisicao">
+      <div class="gl-sec-header">
+        <div class="gl-sec-dot" style="background:var(--blue)"></div>
+        <span class="gl-sec-title">Aquisição</span>
+        <div class="gl-sec-line"></div>
+      </div>
+      <div class="cards-stack">
+
+        <div class="card" data-cat="aquisicao" data-terms="downloads total play store app store lojas">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Downloads Totais</div>
+              <span class="card-tag aquisicao">Aquisição</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Composição</span>
+              <span class="card-formula">Downloads Android (Play Store) + Downloads iOS (App Store)</span>
+            </div>
+            <div class="card-desc">Total de vezes que o EXA Cloud foi baixado nas duas lojas no período. Representa o topo do funil — quantas pessoas demonstraram intenção de instalar o app.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Fonte</div>
+              <div class="detail-txt">Planilha de dados de loja — extraída manualmente das consoles do Google Play e Apple App Store, incorporada ao dashboard via blend.</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-lbl">Download vs. Instalação</div>
+              <div class="detail-txt">Download é o ato de baixar o app da loja. Instalação (First Open) é quando o app é aberto pela primeira vez. A diferença entre os dois representa usuários que baixaram mas nunca abriram.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="aquisicao" data-terms="instalações first open primeiro acesso fl_instalacao">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Instalações — First Open</div>
+              <span class="card-tag aquisicao">Aquisição</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Evento GA4</span>
+              <span class="card-formula">first_open</span>
+            </div>
+            <div class="card-desc">Número de vezes que o app foi aberto pela primeira vez em um dispositivo. Dispara uma única vez por instalação — é o indicador mais confiável de instalações reais.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Tabela de origem</div>
+              <div class="detail-txt"><code>fact_cloud_behavior</code> — coluna <code>fl_instalacao</code> (boolean). Verdadeiro quando a sessão contém o evento <code>first_open</code>.</div>
+            </div>
+            <div class="callout info">
+              <span>ℹ</span>
+              Quedas no mês corrente são esperadas — o período ainda está incompleto na extração. Para comparações entre meses, use sempre meses completos.
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="aquisicao" data-terms="total users usuários únicos dispositivos user_pseudo_id">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Total Users</div>
+              <span class="card-tag aquisicao">Aquisição</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Composição</span>
+              <span class="card-formula">COUNT DISTINCT(user_pseudo_id) no período</span>
+            </div>
+            <div class="card-desc">Total de dispositivos únicos que geraram ao menos um evento no GA4. Cada dispositivo recebe um identificador anônimo único (<em>user_pseudo_id</em>) atribuído automaticamente pelo GA4.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Dispositivo vs. Conta</div>
+              <div class="detail-txt">O <code>user_pseudo_id</code> identifica o dispositivo, não a conta. Um usuário com dois celulares aparece como dois registros. O identificador de conta (<code>user_id</code>) fica disponível após login, mas Total Users sempre usa o pseudo_id.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="aquisicao" data-terms="sessões sessions ga_session_id">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Sessões</div>
+              <span class="card-tag aquisicao">Aquisição</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Composição</span>
+              <span class="card-formula">COUNT DISTINCT(session_id) — chave: ga_session_id</span>
+            </div>
+            <div class="card-desc">Total de sessões registradas pelo GA4. Uma sessão começa quando o usuário abre o app e encerra após 30 minutos de inatividade. O mesmo dispositivo pode gerar múltiplas sessões por dia.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Sessões vs. Usuários</div>
+              <div class="detail-txt">Sessões sempre são ≥ Usuários. Quando Sessões &gt; Usuários, parte dos usuários voltou ao app mais de uma vez no período.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="aquisicao" data-terms="desinstalações app remove ios android fl_desinstalacao">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Desinstalações</div>
+              <span class="card-tag aquisicao">Aquisição</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Composição</span>
+              <span class="card-formula">Android: evento app_remove (GA4)
+iOS: coluna Desinstalacoes_IOS (planilha de loja)</span>
+            </div>
+            <div class="card-desc">Remoções do app no período, combinando duas fontes. Android e iOS têm origens diferentes por uma limitação do sistema iOS — quando o usuário desinstala no iPhone, o sistema encerra o processo imediatamente sem permitir que o app envie eventos.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Tabela de origem</div>
+              <div class="detail-txt"><code>fact_cloud_behavior</code> — coluna <code>fl_desinstalacao</code> para Android. iOS entra via blend com a planilha de loja.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ENGAJAMENTO -->
+    <div class="gl-section" id="sec-engajamento">
+      <div class="gl-sec-header">
+        <div class="gl-sec-dot" style="background:var(--purple)"></div>
+        <span class="gl-sec-title">Engajamento</span>
+        <div class="gl-sec-line"></div>
+      </div>
+      <div class="cards-stack">
+
+        <div class="card" data-cat="engajamento" data-terms="MAU monthly active users usuários ativos mensais fl_sessao_com_uso">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">MAU — Usuários Ativos Mensais</div>
+              <span class="card-tag engajamento">Engajamento</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Composição</span>
+              <span class="card-formula">COUNT DISTINCT(user_pseudo_id) com ≥ 1 sessão no mês</span>
+            </div>
+            <div class="card-desc">Dispositivos únicos que abriram e usaram o app ao menos uma vez no mês. Indicador padrão de saúde de uma base de usuários de app móvel.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">MAU Total vs. MAU com Sessão Engajada</div>
+              <div class="detail-txt">O dashboard exibe dois cortes. <strong>MAU Total</strong>: qualquer sessão registrada. <strong>MAU com Sessão Engajada</strong>: apenas sessões com tempo de uso maior que zero (<code>fl_sessao_com_uso = true</code>). A proporção entre os dois indica a qualidade do engajamento.</div>
+            </div>
+            <div class="callout info">
+              <span>ℹ</span>
+              O mês corrente sempre aparece menor — está incompleto. Para comparações, use meses fechados com pelo menos 3 dias de defasagem da data atual.
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="engajamento" data-terms="DAU daily active users usuários ativos diários">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">DAU — Usuários Ativos Diários</div>
+              <span class="card-tag engajamento">Engajamento</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Composição</span>
+              <span class="card-formula">COUNT DISTINCT(user_pseudo_id) com sessão no dia</span>
+            </div>
+            <div class="card-desc">Dispositivos únicos que abriram o app em cada dia — exibido nos últimos 30 dias. É o indicador de pulso diário do produto.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">DAU/MAU</div>
+              <div class="detail-txt">Dividir o DAU médio pelo MAU do mês revela com que frequência os usuários ativos mensais voltam diariamente — chamado de "stickiness". Quanto maior, mais habitual é o uso.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="engajamento" data-terms="tempo médio sessão session time engagement_time_msec segundos tempo_sessao_sec">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Tempo Médio por Sessão</div>
+              <span class="card-tag engajamento">Engajamento</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Composição</span>
+              <span class="card-formula">AVG(SUM(engagement_time_msec ÷ 1000) por sessão)
+— apenas sessões com fl_sessao_com_uso = true</span>
+            </div>
+            <div class="card-desc">Média de segundos por sessão em que o usuário está ativamente com o app em primeiro plano. Tempo com app minimizado não é contabilizado.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Coluna na tabela</div>
+              <div class="detail-txt"><code>tempo_sessao_sec</code> (float64) em <code>fact_cloud_behavior</code>. Calculada somando o parâmetro <code>engagement_time_msec</code> dos eventos <code>user_engagement</code> da sessão, convertido para segundos.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="engajamento" data-terms="funil login login_screen_viewed successful_login tentativa fl_login_screen fl_login_attempt fl_login_success">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Funil de Conversão de Login</div>
+              <span class="card-tag engajamento">Engajamento</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Eventos GA4</span>
+              <span class="card-formula">login_screen_viewed → login → successful_login</span>
+            </div>
+            <div class="card-desc">Mede a taxa de conversão em cada etapa do processo de login: quantos dispositivos chegam à tela, quantos tentam autenticar e quantos concluem com sucesso.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Flags correspondentes na tabela</div>
+              <div class="detail-txt"><code>fl_login_screen</code> · <code>fl_login_attempt</code> · <code>fl_login_success</code> — todas boolean em <code>fact_cloud_behavior</code>, calculadas por sessão.</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-lbl">Elegibilidade</div>
+              <div class="detail-txt">A flag <code>fl_usuario_elegivel</code> é equivalente a <code>fl_login_success</code>. Usuário logado com sucesso é o critério de elegibilidade para análises que exigem conta autenticada.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ADOÇÃO -->
+    <div class="gl-section" id="sec-adocao">
+      <div class="gl-sec-header">
+        <div class="gl-sec-dot" style="background:var(--green)"></div>
+        <span class="gl-sec-title">Adoção</span>
+        <div class="gl-sec-line"></div>
+      </div>
+      <div class="cards-stack">
+
+        <div class="card" data-cat="adocao" data-terms="uploads tipos conteúdo imagem vídeo documento áudio file_upload qtd_upload">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Volume de Uploads por Tipo</div>
+              <span class="card-tag adocao">Adoção</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Eventos GA4</span>
+              <span class="card-formula">file_upload_image | file_upload_video | file_upload_document | file_upload_audio</span>
+            </div>
+            <div class="card-desc">Quantidade de arquivos enviados para a nuvem, segmentados por tipo. Mostra quais funcionalidades do app estão sendo efetivamente utilizadas.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Colunas na tabela</div>
+              <div class="detail-txt"><code>qtd_upload_image</code> · <code>qtd_upload_video</code> · <code>qtd_upload_document</code> · <code>qtd_upload_audio</code> · <code>qtd_upload_total</code> — todas em <code>fact_cloud_behavior</code>.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="adocao" data-terms="downloads conteúdo baixar file_download qtd_download">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Volume de Downloads por Tipo</div>
+              <span class="card-tag adocao">Adoção</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Eventos GA4</span>
+              <span class="card-formula">file_download_image | file_download_video | file_download_document</span>
+            </div>
+            <div class="card-desc">Quantidade de arquivos baixados do EXA Cloud para o dispositivo. Complementa os uploads — mostra se os usuários também recuperam o que armazenam.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Colunas na tabela</div>
+              <div class="detail-txt"><code>qtd_download_image</code> · <code>qtd_download_video</code> · <code>qtd_download_document</code> · <code>qtd_download_total</code> · <code>download_size_bytes</code> — todas em <code>fact_cloud_behavior</code>.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="adocao" data-terms="espaço consumido storage GB upload_size_mb total_upload_size_mb">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Espaço Consumido (GB)</div>
+              <span class="card-tag adocao">Adoção</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Composição</span>
+              <span class="card-formula">SUM(upload_size_mb) convertido para GB — acumulado mensal</span>
+            </div>
+            <div class="card-desc">Volume total de dados armazenados na nuvem pelo conjunto de usuários no período. Registrado via parâmetro <code>total_upload_size_mb</code> enviado junto ao evento de upload.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Coluna na tabela</div>
+              <div class="detail-txt"><code>upload_size_mb</code> (float64) em <code>fact_cloud_behavior</code>.</div>
+            </div>
+            <div class="callout warn">
+              <span>⚠</span>
+              O valor do mês corrente é parcial — a extração cobre apenas os dias já processados. Não comparar com meses anteriores completos.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RETENÇÃO -->
+    <div class="gl-section" id="sec-retencao">
+      <div class="gl-sec-header">
+        <div class="gl-sec-dot" style="background:var(--amber)"></div>
+        <span class="gl-sec-title">Retenção</span>
+        <div class="gl-sec-line"></div>
+      </div>
+      <div class="cards-stack">
+
+        <div class="card" data-cat="retencao" data-terms="base instalada real acumulada android ios estoque aggr_base_instalada">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Base Instalada Real Acumulada</div>
+              <span class="card-tag retencao">Retenção</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Lógica</span>
+              <span class="card-formula">Σ first_open (Android GA4 + iOS loja) − Σ app_remove (Android GA4) − Σ Desinstalacoes_IOS (loja)
+→ acumulado dia a dia desde o início do rastreamento</span>
+            </div>
+            <div class="card-desc">Estoque atual de dispositivos com o EXA Cloud instalado. Cresce com novas instalações e diminui com desinstalações. É a penetração líquida do produto.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Tabela de origem</div>
+              <div class="detail-txt"><code>aggr_base_instalada_cloud</code> — colunas <code>base_instalada_real_acumulada</code>, <code>base_instalada_real_acumulada_android</code> e <code>base_instalada_real_acumulada_ios</code>. Calculadas com window function acumulativa (<code>SUM OVER ORDER BY dia</code>).</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-lbl">Por que "Real"?</div>
+              <div class="detail-txt">Diferencia-se de somar downloads históricos. O cálculo desconta desinstalações, produzindo o estoque líquido — dispositivos que ainda têm o app instalado.</div>
+            </div>
+            <div class="callout info">
+              <span>ℹ</span>
+              Como a planilha iOS é atualizada manualmente, defasagens nela afetam diretamente o indicador para o segmento iOS.
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="retencao" data-terms="auto sync sincronização automática fl_auto_sync_ativado settings">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Adoção de Auto-Sync</div>
+              <span class="card-tag retencao">Retenção</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Flag GA4</span>
+              <span class="card-formula">fl_auto_sync_ativado ← settings_auto_upload_enabled | sync_auto_enabled</span>
+            </div>
+            <div class="card-desc">Percentual de usuários que ativaram a sincronização automática — funcionalidade que realiza backup contínuo dos arquivos sem interação manual.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Coluna na tabela</div>
+              <div class="detail-txt"><code>fl_auto_sync_ativado</code> (boolean) em <code>fact_cloud_behavior</code>. Verdadeiro se a sessão contiver ao menos um dos eventos de ativação do sync automático.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="retencao" data-terms="pastas criadas organização folder_created qtd_pastas_criadas">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Pastas Criadas</div>
+              <span class="card-tag retencao">Retenção</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Evento GA4</span>
+              <span class="card-formula">SUM(qtd_pastas_criadas) ← folder_created</span>
+            </div>
+            <div class="card-desc">Total de pastas criadas pelos usuários para organizar arquivos na nuvem. Usuários que criam pastas demonstram intenção de uso estruturado e contínuo do produto.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Coluna na tabela</div>
+              <div class="detail-txt"><code>qtd_pastas_criadas</code> (int64) em <code>fact_cloud_behavior</code> — contagem do evento <code>folder_created</code> por sessão.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="retencao" data-terms="método login onboarding keycloak apple google manual login_method">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Método de Login</div>
+              <span class="card-tag retencao">Retenção</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Parâmetro GA4</span>
+              <span class="card-formula">event_params[key='method'] → onboarding | keycloak | apple | google | post | manual</span>
+            </div>
+            <div class="card-desc">Distribuição dos métodos usados para autenticar no EXA Cloud. Extraído do payload do evento de login e armazenado na coluna <code>login_method</code>.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Coluna na tabela</div>
+              <div class="detail-txt"><code>login_method</code> (string) em <code>fact_cloud_behavior</code>. Quando uma sessão tem múltiplas tentativas com métodos diferentes, é armazenado o último valor via <code>MAX(login_method)</code>.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="retencao" data-terms="recência dias última sessão segmento dormentes instalados_sessao">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Segmentação de Recência</div>
+              <span class="card-tag retencao">Retenção</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Lógica</span>
+              <span class="card-formula">DATE_DIFF(data_referencia, última sessão do usuário, DAY)
+→ faixas: ≤30d | 31-60d | 61-90d | 91-120d | 121-150d | 151-180d | 181+d</span>
+            </div>
+            <div class="card-desc">Classifica cada usuário instalado pelo tempo desde sua última sessão. Calculado diariamente para todos os usuários da base instalada.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Colunas na tabela</div>
+              <div class="detail-txt"><code>instalados_sessao_ate_30d</code> · <code>instalados_sessao_31_60d</code> · <code>instalados_sessao_61_90d</code> · <code>instalados_sessao_91_120d</code> · <code>instalados_sessao_121_150d</code> · <code>instalados_sessao_151_180d</code> · <code>instalados_sessao_181_plus</code> — todas em <code>aggr_base_instalada_cloud</code>.</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-lbl">Como as faixas são calculadas</div>
+              <div class="detail-txt">Para cada dia, o sistema verifica a última data de sessão de cada usuário ainda instalado e calcula a diferença em dias. Usuários sem nenhum registro de sessão ficam na faixa 181+.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- INFRA & DADOS -->
+    <div class="gl-section" id="sec-infra">
+      <div class="gl-sec-header">
+        <div class="gl-sec-dot" style="background:var(--slate)"></div>
+        <span class="gl-sec-title">Infra &amp; Qualidade dos Dados</span>
+        <div class="gl-sec-line"></div>
+      </div>
+      <div class="cards-stack">
+
+        <div class="card" data-cat="infra" data-terms="watermark processamento incremental bigquery 3 dias v_watermark">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Processamento Incremental — Watermark</div>
+              <span class="card-tag infra">Infra &amp; Dados</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Lógica</span>
+              <span class="card-formula">v_watermark = MAX(event_date) − 3 dias</span>
+            </div>
+            <div class="card-desc">A tabela <code>fact_cloud_behavior</code> é atualizada diariamente, reprocessando os últimos 3 dias para capturar eventos que chegam com atraso ao BigQuery — o GA4 pode enviar eventos com até 72h de defasagem (dispositivos offline, por exemplo).</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Impacto nos dados do dashboard</div>
+              <div class="detail-txt">Os últimos 2–3 dias visíveis podem ter números levemente subnotificados. Para análises comparativas, prefira períodos com pelo menos 3 dias de defasagem em relação à data atual.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="infra" data-terms="chave primária surrogate key integridade duplicatas farm_fingerprint cloud_behavior_sk">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Chave Primária &amp; Integridade</div>
+              <span class="card-tag infra">Infra &amp; Dados</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Geração</span>
+              <span class="card-formula">FARM_FINGERPRINT(event_date + user_pseudo_id + user_id + session_id)</span>
+            </div>
+            <div class="card-desc">Cada linha da tabela representa uma sessão única de um dispositivo em um dia. Uma validação automática roda após cada processamento — se encontrar duplicatas, o job falha antes de atualizar o dashboard.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Garantia para as métricas</div>
+              <div class="detail-txt">Sem esse controle, uma falha de reprocessamento poderia duplicar sessões e inflar métricas como MAU, DAU e contagem de uploads. O <code>ASSERT</code> automático é a salvaguarda que impede isso de chegar ao dashboard.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-cat="infra" data-terms="blend combinação dados looker studio planilha ga4 year_month_date">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">Blend de Dados — Looker Studio</div>
+              <span class="card-tag infra">Infra &amp; Dados</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">Configuração</span>
+              <span class="card-formula">aggr_base_instalada_cloud (BigQuery)
+LEFT JOIN Downloads Loja (Planilha)
+ON data_referencia = Data</span>
+            </div>
+            <div class="card-desc">Alguns gráficos combinam dados do BigQuery (comportamento in-app) com a planilha de loja (Google Play + App Store) via recurso de "Combinar dados" do Looker Studio.</div>
+            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              Ver detalhes
+            </button>
+          </div>
+          <div class="card-detail">
+            <div class="detail-item">
+              <div class="detail-lbl">Indicadores que dependem do blend</div>
+              <div class="detail-txt">Base Instalada iOS, Desinstalações iOS, Total Downloads. Se a planilha não for atualizada, esses indicadores ficam defasados.</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-lbl">Indicadores independentes do blend</div>
+              <div class="detail-txt">MAU, DAU, Funil de Login, Uploads, Tempo de Sessão, Recência e todos os indicadores de comportamento in-app. Alimentados exclusivamente pelo BigQuery e atualizados automaticamente.</div>
+            </div>
+            <div class="callout ok">
+              <span>✓</span>
+              A dimensão temporal de todos os gráficos mensais usa <code>year_month_date</code> (tipo DATE, DATE_TRUNC do mês) — garante agrupamento correto por mês no Looker Studio.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty" id="emptyState">
+      <p>Nenhum indicador encontrado.</p>
+      <p>Tente outro termo de busca.</p>
+    </div>
+
+  </main>
+</div>
+
+<footer class="footer">
+  <span>EXA Cloud · Glossário de Indicadores</span>
+  <span>GA4 + BigQuery + Google Sheets · Atualização diária</span>
+</footer>
+
+<script>
+function toggleCard(btn) {
+  const detail = btn.closest('.card-body').nextElementSibling;
+  const open = detail.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open);
+  const t = [...btn.childNodes].find(n => n.nodeType === 3);
+  if (t) t.textContent = open ? ' Ver menos' : ' Ver detalhes';
+}
+
+let activeCat = 'all';
+function filterCat(cat, el) {
+  activeCat = cat;
+  applyFilters();
+  document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
+  el.classList.add('active');
+  return false;
+}
+
+const searchInput = document.getElementById('searchInput');
+const searchBadge = document.getElementById('searchBadge');
+let searchTerm = '';
+
+searchInput.addEventListener('input', e => {
+  searchTerm = e.target.value.toLowerCase().trim();
+  applyFilters();
+});
+
+function applyFilters() {
+  const allCards = document.querySelectorAll('.card');
+  let visible = 0;
+  allCards.forEach(card => {
+    const catOk    = activeCat === 'all' || card.dataset.cat === activeCat;
+    const body     = card.textContent.toLowerCase();
+    const terms    = (card.dataset.terms || '') + ' ' + (card.querySelector('.card-name')?.textContent || '');
+    const searchOk = searchTerm === '' || terms.toLowerCase().includes(searchTerm) || body.includes(searchTerm);
+    card.style.display = (catOk && searchOk) ? '' : 'none';
+    if (catOk && searchOk) visible++;
+  });
+  document.querySelectorAll('.gl-section[id]').forEach(sec => {
+    if (sec.id === 'sec-arquitetura') return;
+    const any = [...sec.querySelectorAll('.card')].some(c => c.style.display !== 'none');
+    sec.style.display = any ? '' : 'none';
+  });
+  const total = allCards.length;
+  searchBadge.textContent = (searchTerm && visible < total) ? visible : '';
+  document.getElementById('emptyState').classList.toggle('show', visible === 0);
+}
+
+// scroll spy
+const sections = document.querySelectorAll('.gl-section[id]');
+const navLinks  = document.querySelectorAll('.sb-link[data-sec]');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.toggle('active', l.dataset.sec === e.target.id));
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
