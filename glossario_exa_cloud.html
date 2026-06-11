@@ -8,52 +8,40 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ── TOKENS ─────────────────────────────────────────────── */
 :root {
-  --blue:        #1A56E8;
-  --blue-mid:    #2F6AF0;
-  --blue-soft:   #EBF1FD;
-  --blue-text:   #1340B8;
-  --purple:      #6D28D9;
-  --purple-soft: #EDE9FE;
-  --green:       #0C7A4E;
-  --green-soft:  #DCFCE7;
-  --amber:       #B45309;
-  --amber-soft:  #FEF3C7;
-  --slate:       #475569;
-  --slate-soft:  #F1F5F9;
-  --ink:         #111827;
-  --ink-2:       #374151;
-  --ink-3:       #6B7280;
-  --ink-4:       #9CA3AF;
-  --line:        #E5E7EB;
-  --line-mid:    #D1D5DB;
-  --bg:          #FFFFFF;
-  --bg-2:        #F9FAFB;
-  --sidebar-w:   220px;
-  --radius:      10px;
-  --radius-sm:   6px;
+  --blue:#1A56E8;--blue-soft:#EBF1FD;--blue-text:#1340B8;
+  --purple:#6D28D9;--purple-soft:#EDE9FE;
+  --green:#0C7A4E;--green-soft:#DCFCE7;
+  --amber:#B45309;--amber-soft:#FEF3C7;
+  --slate:#475569;--slate-soft:#F1F5F9;
+  --ink:#111827;--ink-2:#374151;--ink-3:#6B7280;--ink-4:#9CA3AF;
+  --line:#E5E7EB;--line-mid:#D1D5DB;--bg:#FFFFFF;--bg-2:#F9FAFB;
+  --red:#DC2626;--red-soft:#FEE2E2;
+  --sidebar-w:220px;--radius:10px;--radius-sm:6px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:15px}
 body{font-family:'Inter',sans-serif;background:var(--bg-2);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
 
-/* ── TOP BAR ─────────────────────────────────────────────── */
-.topbar{position:fixed;top:0;left:0;right:0;height:52px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 28px;gap:10px;z-index:200}
-.topbar-logo{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--blue);letter-spacing:-.01em}
+/* TOP BAR */
+.topbar{position:fixed;top:0;left:0;right:0;height:52px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;gap:10px;z-index:300}
+.topbar-logo{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--blue)}
 .topbar-sep{width:1px;height:16px;background:var(--line-mid)}
-.topbar-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:400;color:var(--ink-3)}
-.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.topbar-title{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink-3)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
 .search-wrap{position:relative}
 .search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink-4);pointer-events:none}
-.search-wrap input{width:220px;padding:6px 32px 6px 30px;border:1.5px solid var(--line);border-radius:20px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);background:var(--bg-2);outline:none;transition:border-color .15s,width .2s}
-.search-wrap input:focus{border-color:var(--blue);width:270px}
+.search-wrap input{width:210px;padding:6px 30px 6px 30px;border:1.5px solid var(--line);border-radius:20px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);background:var(--bg-2);outline:none;transition:border-color .15s,width .2s}
+.search-wrap input:focus{border-color:var(--blue);width:260px}
 .search-badge{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--ink-4);pointer-events:none}
+.btn-admin-login{display:flex;align-items:center;gap:6px;padding:6px 14px;border:1.5px solid var(--line);border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--ink-3);background:var(--bg);cursor:pointer;transition:all .15s}
+.btn-admin-login:hover{border-color:var(--blue);color:var(--blue)}
+.btn-admin-login.active{border-color:var(--amber);color:var(--amber);background:var(--amber-soft)}
 
-/* ── LAYOUT ──────────────────────────────────────────────── */
+/* LAYOUT */
 .layout{display:flex;padding-top:52px;min-height:100vh}
 
-/* ── SIDEBAR ─────────────────────────────────────────────── */
+/* SIDEBAR */
 .sidebar{width:var(--sidebar-w);flex-shrink:0;position:fixed;top:52px;left:0;bottom:0;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 0 40px;scrollbar-width:thin}
 .sidebar-group{margin-bottom:4px}
 .sidebar-label{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);padding:6px 18px 4px}
@@ -64,10 +52,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg-2);color:var(--ink);line
 .sb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .sb-divider{height:1px;background:var(--line);margin:14px 18px}
 
-/* ── CONTENT ─────────────────────────────────────────────── */
+/* CONTENT */
 .content{margin-left:var(--sidebar-w);flex:1;padding:40px 48px 80px;max-width:1060px}
 
-/* ── PAGE HEADER ─────────────────────────────────────────── */
+/* PAGE HEADER */
 .page-header{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--line)}
 .page-eyebrow{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
 .page-header h1{font-family:'DM Sans',sans-serif;font-size:28px;font-weight:700;color:var(--ink);letter-spacing:-.025em;line-height:1.2;margin-bottom:10px}
@@ -76,9 +64,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg-2);color:var(--ink);line
 .meta-item{font-size:12px;color:var(--ink-4)}
 .meta-item strong{color:var(--ink-2);font-weight:500}
 
-/* ── ARCH ────────────────────────────────────────────────── */
+/* ARCH */
 .arch-wrap{margin-bottom:48px}
-.gl-sec-label{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);margin-bottom:14px}
+.gl-sec-label-standalone{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);margin-bottom:14px}
 .arch-box{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:24px 28px}
 .arch-flow{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:18px}
 .arch-node{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 14px}
@@ -92,14 +80,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg-2);color:var(--ink);line
 .arch-note{font-size:13px;color:var(--ink-3);line-height:1.6;border-top:1px solid var(--line);padding-top:14px}
 .arch-note strong{color:var(--ink-2);font-weight:500}
 
-/* ── SECTION ─────────────────────────────────────────────── */
+/* SECTIONS */
 .gl-section{margin-bottom:48px;scroll-margin-top:72px}
 .gl-sec-header{display:flex;align-items:center;gap:10px;margin-bottom:18px}
 .gl-sec-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .gl-sec-title{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4)}
 .gl-sec-line{flex:1;height:1px;background:var(--line)}
 
-/* ── CARDS ───────────────────────────────────────────────── */
+/* CARDS */
 .cards-stack{display:flex;flex-direction:column;gap:10px}
 .card{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:box-shadow .15s;position:relative}
 .card:hover{box-shadow:0 2px 12px rgba(0,0,0,.06)}
@@ -110,7 +98,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg-2);color:var(--ink);line
 .card[data-cat="adocao"]::before{background:var(--green)}
 .card[data-cat="retencao"]::before{background:var(--amber)}
 .card[data-cat="infra"]::before{background:var(--slate)}
-
 .card-body{padding:18px 22px 18px 26px}
 .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
 .card-name{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.01em;line-height:1.3}
@@ -120,17 +107,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg-2);color:var(--ink);line
 .card-tag.adocao{background:var(--green-soft);color:var(--green)}
 .card-tag.retencao{background:var(--amber-soft);color:var(--amber)}
 .card-tag.infra{background:var(--slate-soft);color:var(--slate)}
-
 .card-formula-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 .card-formula-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4);white-space:nowrap;flex-shrink:0}
 .card-formula{font-family:'DM Mono',monospace;font-size:12px;color:var(--blue-text);background:var(--blue-soft);border-radius:var(--radius-sm);padding:4px 10px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
 .card-desc{font-size:14px;color:var(--ink-2);line-height:1.65}
-
 .card-toggle{display:flex;align-items:center;gap:5px;margin-top:12px;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--blue);background:none;border:none;padding:0;cursor:pointer;transition:opacity .12s}
 .card-toggle:hover{opacity:.7}
 .card-toggle svg{transition:transform .2s}
 .card-toggle.open svg{transform:rotate(180deg)}
-
 .card-detail{display:none;padding:14px 22px 18px 26px;border-top:1px solid var(--line);background:var(--bg-2)}
 .card-detail.open{display:block}
 .detail-item{margin-bottom:12px}
@@ -138,30 +122,101 @@ body{font-family:'Inter',sans-serif;background:var(--bg-2);color:var(--ink);line
 .detail-lbl{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-4);margin-bottom:4px}
 .detail-txt{font-size:13px;color:var(--ink-3);line-height:1.65}
 .detail-txt code{font-family:'DM Mono',monospace;font-size:12px;background:var(--blue-soft);color:var(--blue-text);padding:1px 5px;border-radius:3px}
-
 .callout{display:flex;gap:9px;padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;line-height:1.55;margin-top:10px}
 .callout span{flex-shrink:0}
 .callout.info{background:var(--blue-soft);color:var(--blue-text);border-left:2px solid var(--blue)}
 .callout.warn{background:var(--amber-soft);color:var(--amber);border-left:2px solid var(--amber)}
 .callout.ok{background:var(--green-soft);color:var(--green);border-left:2px solid var(--green)}
 
-/* ── EMPTY ───────────────────────────────────────────────── */
+/* EMPTY */
 .empty{display:none;text-align:center;padding:60px 0;color:var(--ink-4)}
 .empty.show{display:block}
-.empty p+p{margin-top:6px;font-size:13px}
 
-/* ── FOOTER ──────────────────────────────────────────────── */
+/* FOOTER */
 .footer{margin-left:var(--sidebar-w);border-top:1px solid var(--line);padding:18px 48px;display:flex;justify-content:space-between;font-size:12px;color:var(--ink-4);background:var(--bg)}
 
-/* ── A11Y ────────────────────────────────────────────────── */
+/* ── ADMIN MODE ──────────────────────────────────────────── */
+.admin-bar{display:none;position:fixed;bottom:0;left:var(--sidebar-w);right:0;height:52px;background:var(--amber);z-index:250;align-items:center;padding:0 24px;gap:12px}
+.admin-bar.show{display:flex}
+.admin-bar-label{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#fff;flex:1}
+.btn-ab{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:opacity .15s}
+.btn-ab:hover{opacity:.85}
+.btn-add-card{background:#fff;color:var(--amber)}
+.btn-add-section{background:rgba(255,255,255,.2);color:#fff}
+.btn-export{background:#1A56E8;color:#fff}
+.btn-logout-admin{background:rgba(0,0,0,.15);color:#fff}
+
+/* ADMIN EDIT OVERLAYS ON CARDS */
+.admin-mode .card{border-color:var(--amber);border-style:dashed}
+.admin-mode .card:hover{box-shadow:0 0 0 2px var(--amber)}
+.card-admin-controls{display:none;position:absolute;top:10px;right:10px;gap:6px;z-index:10}
+.admin-mode .card-admin-controls{display:flex}
+.btn-edit-card,.btn-del-card{width:28px;height:28px;border-radius:6px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:opacity .15s}
+.btn-edit-card{background:var(--blue);color:#fff}
+.btn-del-card{background:var(--red-soft);color:var(--red)}
+.btn-edit-card:hover,.btn-del-card:hover{opacity:.8}
+
+/* ADMIN SECTION CONTROLS */
+.section-admin-controls{display:none;gap:8px;margin-left:10px}
+.admin-mode .section-admin-controls{display:flex}
+.btn-edit-sec,.btn-del-sec,.btn-move-sec{height:24px;padding:0 10px;border-radius:5px;border:none;cursor:pointer;font-size:11px;font-weight:600;transition:opacity .15s}
+.btn-edit-sec{background:var(--blue-soft);color:var(--blue-text)}
+.btn-del-sec{background:var(--red-soft);color:var(--red)}
+.btn-move-sec{background:var(--slate-soft);color:var(--slate)}
+.btn-edit-sec:hover,.btn-del-sec:hover,.btn-move-sec:hover{opacity:.75}
+
+/* ARCH ADMIN */
+.arch-admin-btn{display:none;margin-top:14px}
+.admin-mode .arch-admin-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--bg);border-radius:14px;width:620px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal-header{padding:22px 26px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:'DM Sans',sans-serif;font-size:17px;font-weight:700;color:var(--ink)}
+.modal-close{width:32px;height:32px;border-radius:8px;border:none;background:var(--bg-2);color:var(--ink-3);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--line)}
+.modal-body{padding:22px 26px}
+.modal-footer{padding:16px 26px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end}
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
+.form-input,.form-select,.form-textarea{width:100%;padding:9px 12px;border:1.5px solid var(--line);border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none;transition:border-color .15s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--blue)}
+.form-textarea{resize:vertical;min-height:80px;line-height:1.55}
+.form-hint{font-size:11px;color:var(--ink-4);margin-top:4px}
+.detail-entries{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.detail-entry{background:var(--bg-2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;position:relative}
+.detail-entry-remove{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:5px;border:none;background:var(--red-soft);color:var(--red);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center}
+.btn-add-detail{margin-top:8px;padding:7px 14px;background:var(--bg-2);border:1.5px dashed var(--line-mid);border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;color:var(--ink-3);cursor:pointer;width:100%;transition:border-color .15s}
+.btn-add-detail:hover{border-color:var(--blue);color:var(--blue)}
+
+/* LOGIN MODAL */
+.login-modal{background:var(--bg);border-radius:14px;width:360px;padding:32px;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center}
+.login-modal h2{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.login-modal p{font-size:13px;color:var(--ink-3);margin-bottom:22px}
+.login-error{font-size:12px;color:var(--red);margin-top:8px;display:none}
+.login-error.show{display:block}
+
+/* EXPORT MODAL */
+.export-modal{background:var(--bg);border-radius:14px;width:560px;max-width:95vw;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.export-modal h2{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.export-modal p{font-size:13px;color:var(--ink-3);margin-bottom:18px;line-height:1.6}
+.export-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.export-step{display:flex;gap:12px;align-items:flex-start;background:var(--bg-2);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.export-step-num{width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.export-step-text{font-size:13px;color:var(--ink-2);line-height:1.55}
+.export-step-text strong{color:var(--ink);font-weight:600}
+.btn-download{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.btn-download:hover{opacity:.88}
+.btn-secondary{padding:9px 18px;background:var(--bg-2);border:1.5px solid var(--line);border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--ink-3);cursor:pointer}
+.btn-primary{padding:9px 18px;background:var(--blue);border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#fff;cursor:pointer}
+.btn-danger{padding:9px 18px;background:var(--red);border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#fff;cursor:pointer}
+
+/* A11Y */
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:3px}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
-@media(max-width:800px){
-  .sidebar{display:none}
-  .content,.footer{margin-left:0;padding-left:20px;padding-right:20px}
-  .arch-flow{flex-direction:column}
-  .arch-arrow{transform:rotate(90deg)}
-}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+@media(max-width:800px){.sidebar{display:none}.content,.footer,.admin-bar{margin-left:0;left:0;padding-left:20px;padding-right:20px}}
 </style>
 </head>
 <body>
@@ -174,68 +229,57 @@ body{font-family:'Inter',sans-serif;background:var(--bg-2);color:var(--ink);line
   <div class="topbar-right">
     <div class="search-wrap">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="searchInput" placeholder="Buscar indicador…" aria-label="Buscar indicador">
+      <input type="text" id="searchInput" placeholder="Buscar indicador…" aria-label="Buscar">
       <span class="search-badge" id="searchBadge"></span>
     </div>
+    <button class="btn-admin-login" id="btnAdminLogin" onclick="openLoginModal()">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Admin
+    </button>
   </div>
 </header>
 
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar" aria-label="Navegação">
+  <div class="sidebar-group">
+    <div class="sidebar-label">Referência</div>
+    <a class="sb-link" href="#sec-arquitetura">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Arquitetura
+    </a>
+  </div>
+  <div class="sb-divider"></div>
+  <div class="sidebar-group">
+    <div class="sidebar-label">Indicadores</div>
+    <div id="sidebarSections"></div>
+  </div>
+  <div class="sb-divider"></div>
+  <div class="sidebar-group">
+    <div class="sidebar-label">Filtrar</div>
+    <button class="sb-link active" onclick="filterCat('all',this)">
+      <span class="sb-dot" style="background:var(--line-mid)"></span>Todos
+    </button>
+    <button class="sb-link" onclick="filterCat('aquisicao',this)">
+      <span class="sb-dot" style="background:var(--blue)"></span>Só Aquisição
+    </button>
+    <button class="sb-link" onclick="filterCat('engajamento',this)">
+      <span class="sb-dot" style="background:var(--purple)"></span>Só Engajamento
+    </button>
+    <button class="sb-link" onclick="filterCat('adocao',this)">
+      <span class="sb-dot" style="background:var(--green)"></span>Só Adoção
+    </button>
+    <button class="sb-link" onclick="filterCat('retencao',this)">
+      <span class="sb-dot" style="background:var(--amber)"></span>Só Retenção
+    </button>
+    <button class="sb-link" onclick="filterCat('infra',this)">
+      <span class="sb-dot" style="background:var(--slate)"></span>Só Infra
+    </button>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
 <div class="layout">
-
-  <!-- SIDEBAR -->
-  <nav class="sidebar" aria-label="Navegação">
-    <div class="sidebar-group">
-      <div class="sidebar-label">Referência</div>
-      <a class="sb-link" href="#sec-arquitetura">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        Arquitetura
-      </a>
-    </div>
-    <div class="sb-divider"></div>
-    <div class="sidebar-group">
-      <div class="sidebar-label">Seções</div>
-      <a class="sb-link" href="#sec-aquisicao" data-sec="sec-aquisicao">
-        <span class="sb-dot" style="background:var(--blue)"></span>Aquisição
-      </a>
-      <a class="sb-link" href="#sec-engajamento" data-sec="sec-engajamento">
-        <span class="sb-dot" style="background:var(--purple)"></span>Engajamento
-      </a>
-      <a class="sb-link" href="#sec-adocao" data-sec="sec-adocao">
-        <span class="sb-dot" style="background:var(--green)"></span>Adoção
-      </a>
-      <a class="sb-link" href="#sec-retencao" data-sec="sec-retencao">
-        <span class="sb-dot" style="background:var(--amber)"></span>Retenção
-      </a>
-      <a class="sb-link" href="#sec-infra" data-sec="sec-infra">
-        <span class="sb-dot" style="background:var(--slate)"></span>Infra &amp; Dados
-      </a>
-    </div>
-    <div class="sb-divider"></div>
-    <div class="sidebar-group">
-      <div class="sidebar-label">Filtrar</div>
-      <button class="sb-link active" onclick="filterCat('all',this)">
-        <span class="sb-dot" style="background:var(--line-mid)"></span>Todos
-      </button>
-      <button class="sb-link" onclick="filterCat('aquisicao',this)">
-        <span class="sb-dot" style="background:var(--blue)"></span>Só Aquisição
-      </button>
-      <button class="sb-link" onclick="filterCat('engajamento',this)">
-        <span class="sb-dot" style="background:var(--purple)"></span>Só Engajamento
-      </button>
-      <button class="sb-link" onclick="filterCat('adocao',this)">
-        <span class="sb-dot" style="background:var(--green)"></span>Só Adoção
-      </button>
-      <button class="sb-link" onclick="filterCat('retencao',this)">
-        <span class="sb-dot" style="background:var(--amber)"></span>Só Retenção
-      </button>
-      <button class="sb-link" onclick="filterCat('infra',this)">
-        <span class="sb-dot" style="background:var(--slate)"></span>Só Infra
-      </button>
-    </div>
-  </nav>
-
-  <!-- CONTENT -->
-  <main class="content">
+  <main class="content" id="mainContent">
 
     <!-- PAGE HEADER -->
     <div class="page-header">
@@ -252,635 +296,35 @@ body{font-family:'Inter',sans-serif;background:var(--bg-2);color:var(--ink);line
 
     <!-- ARQUITETURA -->
     <div class="arch-wrap gl-section" id="sec-arquitetura">
-      <div class="gl-sec-label">De onde vêm os números</div>
-      <div class="arch-box">
+      <div class="gl-sec-label-standalone">De onde vêm os números</div>
+      <div class="arch-box" id="archBox">
         <div class="arch-flow">
-          <div class="arch-node">
-            <div class="arch-node-lbl">Origem 1</div>
-            <div class="arch-node-name">Eventos in-app</div>
-            <div class="arch-node-sub">SDK GA4 · Android + iOS</div>
-          </div>
+          <div class="arch-node"><div class="arch-node-lbl">Origem 1</div><div class="arch-node-name">Eventos in-app</div><div class="arch-node-sub">SDK GA4 · Android + iOS</div></div>
           <span class="arch-arrow">→</span>
-          <div class="arch-node">
-            <div class="arch-node-lbl">Coleta</div>
-            <div class="arch-node-name">Google Analytics 4</div>
-            <div class="arch-node-sub">Propriedade Firebase/GA4</div>
-          </div>
+          <div class="arch-node"><div class="arch-node-lbl">Coleta</div><div class="arch-node-name">Google Analytics 4</div><div class="arch-node-sub">Propriedade Firebase/GA4</div></div>
           <span class="arch-arrow">→</span>
-          <div class="arch-node hl">
-            <div class="arch-node-lbl">Processamento</div>
-            <div class="arch-node-name">BigQuery</div>
-            <div class="arch-node-sub">fact_cloud_behavior</div>
-          </div>
+          <div class="arch-node hl"><div class="arch-node-lbl">Processamento</div><div class="arch-node-name">BigQuery</div><div class="arch-node-sub">fact_cloud_behavior</div></div>
           <span class="arch-arrow">→</span>
-          <div class="arch-node hl">
-            <div class="arch-node-lbl">Agregação</div>
-            <div class="arch-node-name">BigQuery</div>
-            <div class="arch-node-sub">aggr_base_instalada_cloud</div>
-          </div>
+          <div class="arch-node hl"><div class="arch-node-lbl">Agregação</div><div class="arch-node-name">BigQuery</div><div class="arch-node-sub">aggr_base_instalada_cloud</div></div>
           <span class="arch-arrow">→</span>
-          <div class="arch-node">
-            <div class="arch-node-lbl">Visualização</div>
-            <div class="arch-node-name">Looker Studio</div>
-            <div class="arch-node-sub">Dashboard EXA Cloud</div>
-          </div>
+          <div class="arch-node"><div class="arch-node-lbl">Visualização</div><div class="arch-node-name">Looker Studio</div><div class="arch-node-sub">Dashboard EXA Cloud</div></div>
         </div>
-        <div class="arch-note">
-          <strong>Origem 2 — Dados de Loja (Google Play + App Store):</strong> planilha com downloads e desinstalações iOS, alimentada manualmente. Entra no dashboard via blend (combinação de fontes no Looker Studio). O iOS recebe tratamento separado porque o sistema iOS não permite que o app envie eventos de remoção — a única fonte disponível para desinstalações iOS são os relatórios da Apple.
+        <div class="arch-note" id="archNote">
+          <strong>Origem 2 — Dados de Loja (Google Play + App Store):</strong> planilha com downloads e desinstalações iOS, alimentada manualmente. Entra no dashboard via blend no Looker Studio. O iOS recebe tratamento separado porque o sistema não permite que o app envie eventos de remoção — a única fonte disponível são os relatórios da Apple.
         </div>
       </div>
+      <button class="arch-admin-btn" onclick="openArchModal()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
+        Editar nota da arquitetura
+      </button>
     </div>
 
-    <!-- AQUISIÇÃO -->
-    <div class="gl-section" id="sec-aquisicao">
-      <div class="gl-sec-header">
-        <div class="gl-sec-dot" style="background:var(--blue)"></div>
-        <span class="gl-sec-title">Aquisição</span>
-        <div class="gl-sec-line"></div>
-      </div>
-      <div class="cards-stack">
+    <!-- SECTIONS RENDER TARGET -->
+    <div id="sectionsContainer"></div>
 
-        <div class="card" data-cat="aquisicao" data-terms="downloads total play store app store lojas">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Downloads Totais</div>
-              <span class="card-tag aquisicao">Aquisição</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Composição</span>
-              <span class="card-formula">Downloads Android (Play Store) + Downloads iOS (App Store)</span>
-            </div>
-            <div class="card-desc">Total de vezes que o EXA Cloud foi baixado nas duas lojas no período. Representa o topo do funil — quantas pessoas demonstraram intenção de instalar o app.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Fonte</div>
-              <div class="detail-txt">Planilha de dados de loja — extraída manualmente das consoles do Google Play e Apple App Store, incorporada ao dashboard via blend.</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-lbl">Download vs. Instalação</div>
-              <div class="detail-txt">Download é o ato de baixar o app da loja. Instalação (First Open) é quando o app é aberto pela primeira vez. A diferença entre os dois representa usuários que baixaram mas nunca abriram.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="aquisicao" data-terms="instalações first open primeiro acesso fl_instalacao">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Instalações — First Open</div>
-              <span class="card-tag aquisicao">Aquisição</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Evento GA4</span>
-              <span class="card-formula">first_open</span>
-            </div>
-            <div class="card-desc">Número de vezes que o app foi aberto pela primeira vez em um dispositivo. Dispara uma única vez por instalação — é o indicador mais confiável de instalações reais.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Tabela de origem</div>
-              <div class="detail-txt"><code>fact_cloud_behavior</code> — coluna <code>fl_instalacao</code> (boolean). Verdadeiro quando a sessão contém o evento <code>first_open</code>.</div>
-            </div>
-            <div class="callout info">
-              <span>ℹ</span>
-              Quedas no mês corrente são esperadas — o período ainda está incompleto na extração. Para comparações entre meses, use sempre meses completos.
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="aquisicao" data-terms="total users usuários únicos dispositivos user_pseudo_id">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Total Users</div>
-              <span class="card-tag aquisicao">Aquisição</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Composição</span>
-              <span class="card-formula">COUNT DISTINCT(user_pseudo_id) no período</span>
-            </div>
-            <div class="card-desc">Total de dispositivos únicos que geraram ao menos um evento no GA4. Cada dispositivo recebe um identificador anônimo único (<em>user_pseudo_id</em>) atribuído automaticamente pelo GA4.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Dispositivo vs. Conta</div>
-              <div class="detail-txt">O <code>user_pseudo_id</code> identifica o dispositivo, não a conta. Um usuário com dois celulares aparece como dois registros. O identificador de conta (<code>user_id</code>) fica disponível após login, mas Total Users sempre usa o pseudo_id.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="aquisicao" data-terms="sessões sessions ga_session_id">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Sessões</div>
-              <span class="card-tag aquisicao">Aquisição</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Composição</span>
-              <span class="card-formula">COUNT DISTINCT(session_id) — chave: ga_session_id</span>
-            </div>
-            <div class="card-desc">Total de sessões registradas pelo GA4. Uma sessão começa quando o usuário abre o app e encerra após 30 minutos de inatividade. O mesmo dispositivo pode gerar múltiplas sessões por dia.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Sessões vs. Usuários</div>
-              <div class="detail-txt">Sessões sempre são ≥ Usuários. Quando Sessões &gt; Usuários, parte dos usuários voltou ao app mais de uma vez no período.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="aquisicao" data-terms="desinstalações app remove ios android fl_desinstalacao">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Desinstalações</div>
-              <span class="card-tag aquisicao">Aquisição</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Composição</span>
-              <span class="card-formula">Android: evento app_remove (GA4)
-iOS: coluna Desinstalacoes_IOS (planilha de loja)</span>
-            </div>
-            <div class="card-desc">Remoções do app no período, combinando duas fontes. Android e iOS têm origens diferentes por uma limitação do sistema iOS — quando o usuário desinstala no iPhone, o sistema encerra o processo imediatamente sem permitir que o app envie eventos.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Tabela de origem</div>
-              <div class="detail-txt"><code>fact_cloud_behavior</code> — coluna <code>fl_desinstalacao</code> para Android. iOS entra via blend com a planilha de loja.</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ENGAJAMENTO -->
-    <div class="gl-section" id="sec-engajamento">
-      <div class="gl-sec-header">
-        <div class="gl-sec-dot" style="background:var(--purple)"></div>
-        <span class="gl-sec-title">Engajamento</span>
-        <div class="gl-sec-line"></div>
-      </div>
-      <div class="cards-stack">
-
-        <div class="card" data-cat="engajamento" data-terms="MAU monthly active users usuários ativos mensais fl_sessao_com_uso">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">MAU — Usuários Ativos Mensais</div>
-              <span class="card-tag engajamento">Engajamento</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Composição</span>
-              <span class="card-formula">COUNT DISTINCT(user_pseudo_id) com ≥ 1 sessão no mês</span>
-            </div>
-            <div class="card-desc">Dispositivos únicos que abriram e usaram o app ao menos uma vez no mês. Indicador padrão de saúde de uma base de usuários de app móvel.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">MAU Total vs. MAU com Sessão Engajada</div>
-              <div class="detail-txt">O dashboard exibe dois cortes. <strong>MAU Total</strong>: qualquer sessão registrada. <strong>MAU com Sessão Engajada</strong>: apenas sessões com tempo de uso maior que zero (<code>fl_sessao_com_uso = true</code>). A proporção entre os dois indica a qualidade do engajamento.</div>
-            </div>
-            <div class="callout info">
-              <span>ℹ</span>
-              O mês corrente sempre aparece menor — está incompleto. Para comparações, use meses fechados com pelo menos 3 dias de defasagem da data atual.
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="engajamento" data-terms="DAU daily active users usuários ativos diários">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">DAU — Usuários Ativos Diários</div>
-              <span class="card-tag engajamento">Engajamento</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Composição</span>
-              <span class="card-formula">COUNT DISTINCT(user_pseudo_id) com sessão no dia</span>
-            </div>
-            <div class="card-desc">Dispositivos únicos que abriram o app em cada dia — exibido nos últimos 30 dias. É o indicador de pulso diário do produto.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">DAU/MAU</div>
-              <div class="detail-txt">Dividir o DAU médio pelo MAU do mês revela com que frequência os usuários ativos mensais voltam diariamente — chamado de "stickiness". Quanto maior, mais habitual é o uso.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="engajamento" data-terms="tempo médio sessão session time engagement_time_msec segundos tempo_sessao_sec">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Tempo Médio por Sessão</div>
-              <span class="card-tag engajamento">Engajamento</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Composição</span>
-              <span class="card-formula">AVG(SUM(engagement_time_msec ÷ 1000) por sessão)
-— apenas sessões com fl_sessao_com_uso = true</span>
-            </div>
-            <div class="card-desc">Média de segundos por sessão em que o usuário está ativamente com o app em primeiro plano. Tempo com app minimizado não é contabilizado.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Coluna na tabela</div>
-              <div class="detail-txt"><code>tempo_sessao_sec</code> (float64) em <code>fact_cloud_behavior</code>. Calculada somando o parâmetro <code>engagement_time_msec</code> dos eventos <code>user_engagement</code> da sessão, convertido para segundos.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="engajamento" data-terms="funil login login_screen_viewed successful_login tentativa fl_login_screen fl_login_attempt fl_login_success">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Funil de Conversão de Login</div>
-              <span class="card-tag engajamento">Engajamento</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Eventos GA4</span>
-              <span class="card-formula">login_screen_viewed → login → successful_login</span>
-            </div>
-            <div class="card-desc">Mede a taxa de conversão em cada etapa do processo de login: quantos dispositivos chegam à tela, quantos tentam autenticar e quantos concluem com sucesso.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Flags correspondentes na tabela</div>
-              <div class="detail-txt"><code>fl_login_screen</code> · <code>fl_login_attempt</code> · <code>fl_login_success</code> — todas boolean em <code>fact_cloud_behavior</code>, calculadas por sessão.</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-lbl">Elegibilidade</div>
-              <div class="detail-txt">A flag <code>fl_usuario_elegivel</code> é equivalente a <code>fl_login_success</code>. Usuário logado com sucesso é o critério de elegibilidade para análises que exigem conta autenticada.</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ADOÇÃO -->
-    <div class="gl-section" id="sec-adocao">
-      <div class="gl-sec-header">
-        <div class="gl-sec-dot" style="background:var(--green)"></div>
-        <span class="gl-sec-title">Adoção</span>
-        <div class="gl-sec-line"></div>
-      </div>
-      <div class="cards-stack">
-
-        <div class="card" data-cat="adocao" data-terms="uploads tipos conteúdo imagem vídeo documento áudio file_upload qtd_upload">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Volume de Uploads por Tipo</div>
-              <span class="card-tag adocao">Adoção</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Eventos GA4</span>
-              <span class="card-formula">file_upload_image | file_upload_video | file_upload_document | file_upload_audio</span>
-            </div>
-            <div class="card-desc">Quantidade de arquivos enviados para a nuvem, segmentados por tipo. Mostra quais funcionalidades do app estão sendo efetivamente utilizadas.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Colunas na tabela</div>
-              <div class="detail-txt"><code>qtd_upload_image</code> · <code>qtd_upload_video</code> · <code>qtd_upload_document</code> · <code>qtd_upload_audio</code> · <code>qtd_upload_total</code> — todas em <code>fact_cloud_behavior</code>.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="adocao" data-terms="downloads conteúdo baixar file_download qtd_download">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Volume de Downloads por Tipo</div>
-              <span class="card-tag adocao">Adoção</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Eventos GA4</span>
-              <span class="card-formula">file_download_image | file_download_video | file_download_document</span>
-            </div>
-            <div class="card-desc">Quantidade de arquivos baixados do EXA Cloud para o dispositivo. Complementa os uploads — mostra se os usuários também recuperam o que armazenam.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Colunas na tabela</div>
-              <div class="detail-txt"><code>qtd_download_image</code> · <code>qtd_download_video</code> · <code>qtd_download_document</code> · <code>qtd_download_total</code> · <code>download_size_bytes</code> — todas em <code>fact_cloud_behavior</code>.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="adocao" data-terms="espaço consumido storage GB upload_size_mb total_upload_size_mb">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Espaço Consumido (GB)</div>
-              <span class="card-tag adocao">Adoção</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Composição</span>
-              <span class="card-formula">SUM(upload_size_mb) convertido para GB — acumulado mensal</span>
-            </div>
-            <div class="card-desc">Volume total de dados armazenados na nuvem pelo conjunto de usuários no período. Registrado via parâmetro <code>total_upload_size_mb</code> enviado junto ao evento de upload.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Coluna na tabela</div>
-              <div class="detail-txt"><code>upload_size_mb</code> (float64) em <code>fact_cloud_behavior</code>.</div>
-            </div>
-            <div class="callout warn">
-              <span>⚠</span>
-              O valor do mês corrente é parcial — a extração cobre apenas os dias já processados. Não comparar com meses anteriores completos.
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- RETENÇÃO -->
-    <div class="gl-section" id="sec-retencao">
-      <div class="gl-sec-header">
-        <div class="gl-sec-dot" style="background:var(--amber)"></div>
-        <span class="gl-sec-title">Retenção</span>
-        <div class="gl-sec-line"></div>
-      </div>
-      <div class="cards-stack">
-
-        <div class="card" data-cat="retencao" data-terms="base instalada real acumulada android ios estoque aggr_base_instalada">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Base Instalada Real Acumulada</div>
-              <span class="card-tag retencao">Retenção</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Lógica</span>
-              <span class="card-formula">Σ first_open (Android GA4 + iOS loja) − Σ app_remove (Android GA4) − Σ Desinstalacoes_IOS (loja)
-→ acumulado dia a dia desde o início do rastreamento</span>
-            </div>
-            <div class="card-desc">Estoque atual de dispositivos com o EXA Cloud instalado. Cresce com novas instalações e diminui com desinstalações. É a penetração líquida do produto.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Tabela de origem</div>
-              <div class="detail-txt"><code>aggr_base_instalada_cloud</code> — colunas <code>base_instalada_real_acumulada</code>, <code>base_instalada_real_acumulada_android</code> e <code>base_instalada_real_acumulada_ios</code>. Calculadas com window function acumulativa (<code>SUM OVER ORDER BY dia</code>).</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-lbl">Por que "Real"?</div>
-              <div class="detail-txt">Diferencia-se de somar downloads históricos. O cálculo desconta desinstalações, produzindo o estoque líquido — dispositivos que ainda têm o app instalado.</div>
-            </div>
-            <div class="callout info">
-              <span>ℹ</span>
-              Como a planilha iOS é atualizada manualmente, defasagens nela afetam diretamente o indicador para o segmento iOS.
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="retencao" data-terms="auto sync sincronização automática fl_auto_sync_ativado settings">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Adoção de Auto-Sync</div>
-              <span class="card-tag retencao">Retenção</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Flag GA4</span>
-              <span class="card-formula">fl_auto_sync_ativado ← settings_auto_upload_enabled | sync_auto_enabled</span>
-            </div>
-            <div class="card-desc">Percentual de usuários que ativaram a sincronização automática — funcionalidade que realiza backup contínuo dos arquivos sem interação manual.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Coluna na tabela</div>
-              <div class="detail-txt"><code>fl_auto_sync_ativado</code> (boolean) em <code>fact_cloud_behavior</code>. Verdadeiro se a sessão contiver ao menos um dos eventos de ativação do sync automático.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="retencao" data-terms="pastas criadas organização folder_created qtd_pastas_criadas">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Pastas Criadas</div>
-              <span class="card-tag retencao">Retenção</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Evento GA4</span>
-              <span class="card-formula">SUM(qtd_pastas_criadas) ← folder_created</span>
-            </div>
-            <div class="card-desc">Total de pastas criadas pelos usuários para organizar arquivos na nuvem. Usuários que criam pastas demonstram intenção de uso estruturado e contínuo do produto.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Coluna na tabela</div>
-              <div class="detail-txt"><code>qtd_pastas_criadas</code> (int64) em <code>fact_cloud_behavior</code> — contagem do evento <code>folder_created</code> por sessão.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="retencao" data-terms="método login onboarding keycloak apple google manual login_method">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Método de Login</div>
-              <span class="card-tag retencao">Retenção</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Parâmetro GA4</span>
-              <span class="card-formula">event_params[key='method'] → onboarding | keycloak | apple | google | post | manual</span>
-            </div>
-            <div class="card-desc">Distribuição dos métodos usados para autenticar no EXA Cloud. Extraído do payload do evento de login e armazenado na coluna <code>login_method</code>.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Coluna na tabela</div>
-              <div class="detail-txt"><code>login_method</code> (string) em <code>fact_cloud_behavior</code>. Quando uma sessão tem múltiplas tentativas com métodos diferentes, é armazenado o último valor via <code>MAX(login_method)</code>.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="retencao" data-terms="recência dias última sessão segmento dormentes instalados_sessao">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Segmentação de Recência</div>
-              <span class="card-tag retencao">Retenção</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Lógica</span>
-              <span class="card-formula">DATE_DIFF(data_referencia, última sessão do usuário, DAY)
-→ faixas: ≤30d | 31-60d | 61-90d | 91-120d | 121-150d | 151-180d | 181+d</span>
-            </div>
-            <div class="card-desc">Classifica cada usuário instalado pelo tempo desde sua última sessão. Calculado diariamente para todos os usuários da base instalada.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Colunas na tabela</div>
-              <div class="detail-txt"><code>instalados_sessao_ate_30d</code> · <code>instalados_sessao_31_60d</code> · <code>instalados_sessao_61_90d</code> · <code>instalados_sessao_91_120d</code> · <code>instalados_sessao_121_150d</code> · <code>instalados_sessao_151_180d</code> · <code>instalados_sessao_181_plus</code> — todas em <code>aggr_base_instalada_cloud</code>.</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-lbl">Como as faixas são calculadas</div>
-              <div class="detail-txt">Para cada dia, o sistema verifica a última data de sessão de cada usuário ainda instalado e calcula a diferença em dias. Usuários sem nenhum registro de sessão ficam na faixa 181+.</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- INFRA & DADOS -->
-    <div class="gl-section" id="sec-infra">
-      <div class="gl-sec-header">
-        <div class="gl-sec-dot" style="background:var(--slate)"></div>
-        <span class="gl-sec-title">Infra &amp; Qualidade dos Dados</span>
-        <div class="gl-sec-line"></div>
-      </div>
-      <div class="cards-stack">
-
-        <div class="card" data-cat="infra" data-terms="watermark processamento incremental bigquery 3 dias v_watermark">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Processamento Incremental — Watermark</div>
-              <span class="card-tag infra">Infra &amp; Dados</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Lógica</span>
-              <span class="card-formula">v_watermark = MAX(event_date) − 3 dias</span>
-            </div>
-            <div class="card-desc">A tabela <code>fact_cloud_behavior</code> é atualizada diariamente, reprocessando os últimos 3 dias para capturar eventos que chegam com atraso ao BigQuery — o GA4 pode enviar eventos com até 72h de defasagem (dispositivos offline, por exemplo).</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Impacto nos dados do dashboard</div>
-              <div class="detail-txt">Os últimos 2–3 dias visíveis podem ter números levemente subnotificados. Para análises comparativas, prefira períodos com pelo menos 3 dias de defasagem em relação à data atual.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="infra" data-terms="chave primária surrogate key integridade duplicatas farm_fingerprint cloud_behavior_sk">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Chave Primária &amp; Integridade</div>
-              <span class="card-tag infra">Infra &amp; Dados</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Geração</span>
-              <span class="card-formula">FARM_FINGERPRINT(event_date + user_pseudo_id + user_id + session_id)</span>
-            </div>
-            <div class="card-desc">Cada linha da tabela representa uma sessão única de um dispositivo em um dia. Uma validação automática roda após cada processamento — se encontrar duplicatas, o job falha antes de atualizar o dashboard.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Garantia para as métricas</div>
-              <div class="detail-txt">Sem esse controle, uma falha de reprocessamento poderia duplicar sessões e inflar métricas como MAU, DAU e contagem de uploads. O <code>ASSERT</code> automático é a salvaguarda que impede isso de chegar ao dashboard.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" data-cat="infra" data-terms="blend combinação dados looker studio planilha ga4 year_month_date">
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-name">Blend de Dados — Looker Studio</div>
-              <span class="card-tag infra">Infra &amp; Dados</span>
-            </div>
-            <div class="card-formula-row">
-              <span class="card-formula-lbl">Configuração</span>
-              <span class="card-formula">aggr_base_instalada_cloud (BigQuery)
-LEFT JOIN Downloads Loja (Planilha)
-ON data_referencia = Data</span>
-            </div>
-            <div class="card-desc">Alguns gráficos combinam dados do BigQuery (comportamento in-app) com a planilha de loja (Google Play + App Store) via recurso de "Combinar dados" do Looker Studio.</div>
-            <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-              Ver detalhes
-            </button>
-          </div>
-          <div class="card-detail">
-            <div class="detail-item">
-              <div class="detail-lbl">Indicadores que dependem do blend</div>
-              <div class="detail-txt">Base Instalada iOS, Desinstalações iOS, Total Downloads. Se a planilha não for atualizada, esses indicadores ficam defasados.</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-lbl">Indicadores independentes do blend</div>
-              <div class="detail-txt">MAU, DAU, Funil de Login, Uploads, Tempo de Sessão, Recência e todos os indicadores de comportamento in-app. Alimentados exclusivamente pelo BigQuery e atualizados automaticamente.</div>
-            </div>
-            <div class="callout ok">
-              <span>✓</span>
-              A dimensão temporal de todos os gráficos mensais usa <code>year_month_date</code> (tipo DATE, DATE_TRUNC do mês) — garante agrupamento correto por mês no Looker Studio.
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- EMPTY STATE -->
     <div class="empty" id="emptyState">
-      <p>Nenhum indicador encontrado.</p>
-      <p>Tente outro termo de busca.</p>
+      <p style="font-size:14px">Nenhum indicador encontrado.</p>
+      <p style="font-size:13px;margin-top:6px">Tente outro termo de busca.</p>
     </div>
 
   </main>
@@ -891,30 +335,346 @@ ON data_referencia = Data</span>
   <span>GA4 + BigQuery + Google Sheets · Atualização diária</span>
 </footer>
 
+<!-- ADMIN BAR -->
+<div class="admin-bar" id="adminBar">
+  <span class="admin-bar-label">🔐 Modo Admin ativo</span>
+  <button class="btn-ab btn-add-section" onclick="openSectionModal(null)">+ Nova seção</button>
+  <button class="btn-ab btn-add-card" onclick="openCardModal(null, null)">+ Novo indicador</button>
+  <button class="btn-ab btn-export" onclick="openExportModal()">⬇ Exportar HTML</button>
+  <button class="btn-ab btn-logout-admin" onclick="logoutAdmin()">Sair</button>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginOverlay">
+  <div class="login-modal">
+    <h2>Acesso Admin</h2>
+    <p>Digite a senha para entrar no modo de edição.</p>
+    <input class="form-input" type="password" id="loginPassword" placeholder="Senha" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-error" id="loginError">Senha incorreta. Tente novamente.</div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn-secondary" style="flex:1" onclick="closeLoginModal()">Cancelar</button>
+      <button class="btn-primary" style="flex:1" onclick="doLogin()">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ARCH MODAL -->
+<div class="modal-overlay" id="archOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Editar nota da Arquitetura</span>
+      <button class="modal-close" onclick="closeModal('archOverlay')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Texto da nota</label>
+        <textarea class="form-textarea" id="archNoteInput" rows="5"></textarea>
+        <div class="form-hint">Use **texto** para negrito. Linhas em branco viram parágrafos.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('archOverlay')">Cancelar</button>
+      <button class="btn-primary" onclick="saveArchNote()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION MODAL -->
+<div class="modal-overlay" id="sectionOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="sectionModalTitle">Nova Seção</span>
+      <button class="modal-close" onclick="closeModal('sectionOverlay')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="sectionEditId">
+      <div class="form-group">
+        <label class="form-label">Nome da seção</label>
+        <input class="form-input" type="text" id="sectionName" placeholder="ex: Monetização">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoria (id único, sem espaços)</label>
+        <input class="form-input" type="text" id="sectionCat" placeholder="ex: monetizacao">
+        <div class="form-hint">Usado internamente para filtros. Minúsculas, sem acentos.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cor da seção</label>
+        <select class="form-select" id="sectionColor">
+          <option value="#1A56E8">Azul</option>
+          <option value="#6D28D9">Roxo</option>
+          <option value="#0C7A4E">Verde</option>
+          <option value="#B45309">Âmbar</option>
+          <option value="#475569">Cinza</option>
+          <option value="#DC2626">Vermelho</option>
+          <option value="#0891B2">Ciano</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('sectionOverlay')">Cancelar</button>
+      <button class="btn-primary" onclick="saveSection()">Salvar seção</button>
+    </div>
+  </div>
+</div>
+
+<!-- CARD MODAL -->
+<div class="modal-overlay" id="cardOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="cardModalTitle">Novo Indicador</span>
+      <button class="modal-close" onclick="closeModal('cardOverlay')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="cardEditSectionId">
+      <input type="hidden" id="cardEditCardId">
+      <div class="form-group">
+        <label class="form-label">Nome do indicador</label>
+        <input class="form-input" type="text" id="cardName" placeholder="ex: Taxa de Conversão">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Seção</label>
+        <select class="form-select" id="cardSection"></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Label da fórmula</label>
+        <input class="form-input" type="text" id="cardFormulaLabel" placeholder="ex: Composição, Evento GA4, Lógica">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fórmula / Origem</label>
+        <textarea class="form-textarea" id="cardFormula" rows="3" placeholder="ex: COUNT DISTINCT(session_id)"></textarea>
+        <div class="form-hint">Quebras de linha são preservadas na exibição.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Descrição principal</label>
+        <textarea class="form-textarea" id="cardDesc" rows="4" placeholder="Descrição clara e direta do que este indicador representa."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Detalhes expandidos</label>
+        <div class="form-hint" style="margin-bottom:8px">Cada entrada vira um bloco no "Ver detalhes". Opcional.</div>
+        <div class="detail-entries" id="detailEntries"></div>
+        <button class="btn-add-detail" onclick="addDetailEntry()">+ Adicionar bloco de detalhe</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('cardOverlay')">Cancelar</button>
+      <button class="btn-primary" onclick="saveCard()">Salvar indicador</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="deleteOverlay">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <span class="modal-title">Confirmar exclusão</span>
+      <button class="modal-close" onclick="closeModal('deleteOverlay')">×</button>
+    </div>
+    <div class="modal-body">
+      <p id="deleteMsg" style="font-size:14px;color:var(--ink-2);line-height:1.6"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('deleteOverlay')">Cancelar</button>
+      <button class="btn-danger" id="deleteConfirmBtn">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT MODAL -->
+<div class="modal-overlay" id="exportOverlay">
+  <div class="modal-overlay" id="exportOverlay2" style="display:none;position:static;background:none">
+  </div>
+  <div class="export-modal">
+    <h2>Exportar e publicar</h2>
+    <p>O glossário é editado aqui e publicado no GitHub Pages. Baixe o HTML gerado e substitua o arquivo no repositório.</p>
+    <div class="export-steps">
+      <div class="export-step">
+        <div class="export-step-num">1</div>
+        <div class="export-step-text">Clique em <strong>Baixar HTML</strong> — o arquivo já contém todas as edições feitas agora.</div>
+      </div>
+      <div class="export-step">
+        <div class="export-step-num">2</div>
+        <div class="export-step-text">No GitHub, abra o arquivo <strong>glossario_exa_cloud.html</strong> → clique no lápis → selecione todo o conteúdo → cole o novo HTML → Commit.</div>
+      </div>
+      <div class="export-step">
+        <div class="export-step-num">3</div>
+        <div class="export-step-text">Aguarde ~1 minuto para o GitHub Pages atualizar. O Looker Studio reflete automaticamente.</div>
+      </div>
+    </div>
+    <button class="btn-download" onclick="downloadHTML()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Baixar HTML atualizado
+    </button>
+    <div style="display:flex;justify-content:flex-end;margin-top:14px">
+      <button class="btn-secondary" onclick="closeModal('exportOverlay')">Fechar</button>
+    </div>
+  </div>
+</div>
+
 <script>
+// ── DATA ──────────────────────────────────────────────────
+let DATA = {
+  archNote: "**Origem 2 — Dados de Loja (Google Play + App Store):** planilha com downloads e desinstalações iOS, alimentada manualmente. Entra no dashboard via blend no Looker Studio. O iOS recebe tratamento separado porque o sistema não permite que o app envie eventos de remoção — a única fonte disponível são os relatórios da Apple.",
+  sections: [
+    {
+      id: "aquisicao", name: "Aquisição", color: "#1A56E8",
+      cards: [
+        { id:"c1", name:"Downloads Totais", formulaLabel:"Composição", formula:"Downloads Android (Play Store) + Downloads iOS (App Store)", desc:"Total de vezes que o EXA Cloud foi baixado nas duas lojas no período. É o topo do funil — quantas pessoas demonstraram intenção de instalar o app.", details:[{label:"Fonte",text:"Planilha de dados de loja — extraída manualmente das consoles do Google Play e Apple App Store, incorporada ao dashboard via blend."},{label:"Download vs. Instalação",text:"Download é o ato de baixar da loja. Instalação (First Open) é quando o app é aberto pela primeira vez. A diferença entre os dois são usuários que baixaram mas nunca abriram."}] },
+        { id:"c2", name:"Instalações — First Open", formulaLabel:"Evento GA4", formula:"first_open", desc:"Número de vezes que o app foi aberto pela primeira vez em um dispositivo. Dispara uma única vez por instalação — é o indicador mais confiável de instalações reais.", details:[{label:"Tabela de origem",text:"fact_cloud_behavior — coluna fl_instalacao (boolean). Verdadeiro quando a sessão contém o evento first_open."},{label:"Nota sobre mês corrente",text:"Quedas no mês corrente são esperadas — o período ainda está incompleto na extração. Para comparações, use meses fechados.",callout:"info"}] },
+        { id:"c3", name:"Total Users", formulaLabel:"Composição", formula:"COUNT DISTINCT(user_pseudo_id) no período", desc:"Total de dispositivos únicos que geraram ao menos um evento no GA4. Cada dispositivo recebe um identificador anônimo único (user_pseudo_id) atribuído automaticamente pelo GA4.", details:[{label:"Dispositivo vs. Conta",text:"O user_pseudo_id identifica o dispositivo, não a conta. Um usuário com dois celulares aparece como dois registros. O identificador de conta (user_id) fica disponível após login, mas Total Users usa sempre o pseudo_id."}] },
+        { id:"c4", name:"Sessões", formulaLabel:"Composição", formula:"COUNT DISTINCT(session_id) — chave: ga_session_id", desc:"Total de sessões registradas pelo GA4. Uma sessão começa quando o usuário abre o app e encerra após 30 minutos de inatividade. O mesmo dispositivo pode gerar múltiplas sessões por dia.", details:[{label:"Sessões vs. Usuários",text:"Sessões sempre são ≥ Usuários. Quando Sessões > Usuários, parte dos usuários voltou ao app mais de uma vez no período."}] },
+        { id:"c5", name:"Desinstalações", formulaLabel:"Composição", formula:"Android: evento app_remove (GA4)\niOS: coluna Desinstalacoes_IOS (planilha de loja)", desc:"Remoções do app no período, combinando duas fontes. Android e iOS têm origens diferentes — quando o usuário desinstala no iPhone, o sistema encerra o processo imediatamente, sem que o app consiga enviar eventos.", details:[{label:"Tabela de origem",text:"fact_cloud_behavior — coluna fl_desinstalacao para Android. iOS entra via blend com a planilha de loja."}] }
+      ]
+    },
+    {
+      id: "engajamento", name: "Engajamento", color: "#6D28D9",
+      cards: [
+        { id:"c6", name:"MAU — Usuários Ativos Mensais", formulaLabel:"Composição", formula:"COUNT DISTINCT(user_pseudo_id) com ≥ 1 sessão no mês", desc:"Dispositivos únicos que abriram e usaram o app ao menos uma vez no mês. Indicador padrão de saúde da base de usuários de um app móvel.", details:[{label:"MAU Total vs. MAU com Sessão Engajada",text:"O dashboard exibe dois cortes. MAU Total: qualquer sessão registrada. MAU com Sessão Engajada: apenas sessões com tempo de uso maior que zero (fl_sessao_com_uso = true). A proporção entre os dois mostra a qualidade do engajamento."},{label:"Nota sobre mês corrente",text:"O mês corrente sempre aparece menor — está incompleto. Para comparações, use meses fechados com pelo menos 3 dias de defasagem.",callout:"info"}] },
+        { id:"c7", name:"DAU — Usuários Ativos Diários", formulaLabel:"Composição", formula:"COUNT DISTINCT(user_pseudo_id) com sessão no dia", desc:"Dispositivos únicos que abriram o app em cada dia — exibido nos últimos 30 dias. É o indicador de pulso diário do produto.", details:[{label:"DAU/MAU",text:"Dividir o DAU médio pelo MAU do mês mostra com que frequência os usuários ativos mensais voltam diariamente — chamado de stickiness. Quanto maior, mais habitual é o uso."}] },
+        { id:"c8", name:"Tempo Médio por Sessão", formulaLabel:"Composição", formula:"AVG(SUM(engagement_time_msec ÷ 1000) por sessão)\n— apenas sessões com fl_sessao_com_uso = true", desc:"Média de segundos por sessão em que o usuário está ativamente com o app em primeiro plano. Tempo com app minimizado não é contabilizado.", details:[{label:"Coluna na tabela",text:"tempo_sessao_sec (float64) em fact_cloud_behavior. Calculada somando o parâmetro engagement_time_msec dos eventos user_engagement da sessão, convertido para segundos."}] },
+        { id:"c9", name:"Funil de Conversão de Login", formulaLabel:"Eventos GA4", formula:"login_screen_viewed → login → successful_login", desc:"Mede a taxa de conversão em cada etapa do login: quantos dispositivos chegam à tela, quantos tentam autenticar e quantos concluem com sucesso.", details:[{label:"Flags correspondentes",text:"fl_login_screen · fl_login_attempt · fl_login_success — todas boolean em fact_cloud_behavior, calculadas por sessão."},{label:"Elegibilidade",text:"A flag fl_usuario_elegivel é equivalente a fl_login_success. Usuário logado com sucesso é o critério de elegibilidade para análises que exigem conta autenticada."}] }
+      ]
+    },
+    {
+      id: "adocao", name: "Adoção", color: "#0C7A4E",
+      cards: [
+        { id:"c10", name:"Volume de Uploads por Tipo", formulaLabel:"Eventos GA4", formula:"file_upload_image | file_upload_video | file_upload_document | file_upload_audio", desc:"Quantidade de arquivos enviados para a nuvem, segmentados por tipo. Mostra quais funcionalidades do app estão sendo efetivamente usadas.", details:[{label:"Colunas na tabela",text:"qtd_upload_image · qtd_upload_video · qtd_upload_document · qtd_upload_audio · qtd_upload_total — todas em fact_cloud_behavior."}] },
+        { id:"c11", name:"Volume de Downloads por Tipo", formulaLabel:"Eventos GA4", formula:"file_download_image | file_download_video | file_download_document", desc:"Quantidade de arquivos baixados do EXA Cloud para o dispositivo. Complementa os uploads — mostra se os usuários também recuperam o que armazenam.", details:[{label:"Colunas na tabela",text:"qtd_download_image · qtd_download_video · qtd_download_document · qtd_download_total · download_size_bytes — todas em fact_cloud_behavior."}] },
+        { id:"c12", name:"Espaço Consumido (GB)", formulaLabel:"Composição", formula:"SUM(upload_size_mb) convertido para GB — acumulado mensal", desc:"Volume total de dados armazenados na nuvem pelo conjunto de usuários no período. Registrado via parâmetro total_upload_size_mb enviado junto ao evento de upload.", details:[{label:"Coluna na tabela",text:"upload_size_mb (float64) em fact_cloud_behavior."},{label:"Atenção ao mês corrente",text:"O valor do mês corrente é parcial — a extração cobre apenas os dias já processados. Não comparar com meses anteriores completos.",callout:"warn"}] }
+      ]
+    },
+    {
+      id: "retencao", name: "Retenção", color: "#B45309",
+      cards: [
+        { id:"c13", name:"Base Instalada Real Acumulada", formulaLabel:"Lógica", formula:"Σ first_open (Android GA4 + iOS loja) − Σ app_remove (Android GA4) − Σ Desinstalacoes_IOS (loja)\n→ acumulado dia a dia desde o início do rastreamento", desc:"Estoque atual de dispositivos com o EXA Cloud instalado. Cresce com novas instalações e diminui com desinstalações. É a penetração líquida do produto.", details:[{label:"Tabela de origem",text:"aggr_base_instalada_cloud — colunas base_instalada_real_acumulada, base_instalada_real_acumulada_android e base_instalada_real_acumulada_ios. Calculadas com window function acumulativa (SUM OVER ORDER BY dia)."},{label:"Por que 'Real'?",text:"Diferencia-se de somar downloads históricos. O cálculo desconta desinstalações, produzindo o estoque líquido — dispositivos que ainda têm o app instalado."},{label:"Dependência da planilha iOS",text:"Como a planilha iOS é atualizada manualmente, defasagens nela afetam diretamente o indicador para o segmento iOS.",callout:"info"}] },
+        { id:"c14", name:"Adoção de Auto-Sync", formulaLabel:"Flag GA4", formula:"fl_auto_sync_ativado ← settings_auto_upload_enabled | sync_auto_enabled", desc:"Percentual de usuários que ativaram a sincronização automática — funcionalidade que realiza backup contínuo dos arquivos sem interação manual.", details:[{label:"Coluna na tabela",text:"fl_auto_sync_ativado (boolean) em fact_cloud_behavior. Verdadeiro se a sessão contiver ao menos um dos eventos de ativação do sync automático."}] },
+        { id:"c15", name:"Pastas Criadas", formulaLabel:"Evento GA4", formula:"SUM(qtd_pastas_criadas) ← folder_created", desc:"Total de pastas criadas pelos usuários para organizar arquivos na nuvem. Usuários que criam pastas demonstram intenção de uso estruturado e contínuo.", details:[{label:"Coluna na tabela",text:"qtd_pastas_criadas (int64) em fact_cloud_behavior — contagem do evento folder_created por sessão."}] },
+        { id:"c16", name:"Método de Login", formulaLabel:"Parâmetro GA4", formula:"event_params[key='method'] → onboarding | keycloak | apple | google | post | manual", desc:"Distribuição dos métodos usados para autenticar no EXA Cloud. Extraído do payload do evento de login e armazenado na coluna login_method.", details:[{label:"Coluna na tabela",text:"login_method (string) em fact_cloud_behavior. Quando uma sessão tem múltiplas tentativas com métodos diferentes, é armazenado o último valor via MAX(login_method)."}] },
+        { id:"c17", name:"Segmentação de Recência", formulaLabel:"Lógica", formula:"DATE_DIFF(data_referencia, última sessão do usuário, DAY)\n→ faixas: ≤30d | 31-60d | 61-90d | 91-120d | 121-150d | 151-180d | 181+d", desc:"Classifica cada usuário instalado pelo tempo desde sua última sessão. Calculado diariamente para todos os usuários da base instalada.", details:[{label:"Colunas na tabela",text:"instalados_sessao_ate_30d · instalados_sessao_31_60d · instalados_sessao_61_90d · instalados_sessao_91_120d · instalados_sessao_121_150d · instalados_sessao_151_180d · instalados_sessao_181_plus — todas em aggr_base_instalada_cloud."},{label:"Como as faixas são calculadas",text:"Para cada dia, o sistema verifica a última data de sessão de cada usuário ainda instalado e calcula a diferença em dias. Usuários sem nenhum registro de sessão ficam na faixa 181+."}] }
+      ]
+    },
+    {
+      id: "infra", name: "Infra & Dados", color: "#475569",
+      cards: [
+        { id:"c18", name:"Processamento Incremental — Watermark", formulaLabel:"Lógica", formula:"v_watermark = MAX(event_date) − 3 dias", desc:"A tabela fact_cloud_behavior é atualizada diariamente, reprocessando os últimos 3 dias para capturar eventos que chegam com atraso ao BigQuery — o GA4 pode enviar eventos com até 72h de defasagem em dispositivos offline.", details:[{label:"Impacto nos dados do dashboard",text:"Os últimos 2–3 dias visíveis podem ter números levemente subnotificados. Para análises comparativas, use períodos com pelo menos 3 dias de defasagem em relação à data de hoje."}] },
+        { id:"c19", name:"Chave Primária & Integridade", formulaLabel:"Geração", formula:"FARM_FINGERPRINT(event_date + user_pseudo_id + user_id + session_id)", desc:"Cada linha da tabela representa uma sessão única de um dispositivo em um dia. Uma validação automática roda após cada processamento — se encontrar duplicatas, o job falha antes de atualizar o dashboard.", details:[{label:"Garantia para as métricas",text:"Sem esse controle, uma falha de reprocessamento poderia duplicar sessões e inflar métricas como MAU, DAU e contagem de uploads. O ASSERT automático é a salvaguarda que impede isso de chegar ao dashboard."}] },
+        { id:"c20", name:"Blend de Dados — Looker Studio", formulaLabel:"Configuração", formula:"aggr_base_instalada_cloud (BigQuery)\nLEFT JOIN Downloads Loja (Planilha)\nON data_referencia = Data", desc:"Alguns gráficos combinam dados do BigQuery com a planilha de loja via recurso de Combinar dados do Looker Studio.", details:[{label:"Indicadores que dependem do blend",text:"Base Instalada iOS, Desinstalações iOS, Total Downloads. Se a planilha não for atualizada, esses indicadores ficam defasados."},{label:"Indicadores independentes",text:"MAU, DAU, Funil de Login, Uploads, Tempo de Sessão, Recência. Alimentados exclusivamente pelo BigQuery e atualizados automaticamente."},{label:"Dimensão temporal",text:"Todos os gráficos mensais usam year_month_date (DATE_TRUNC do mês) — garante agrupamento correto por mês no Looker Studio.",callout:"ok"}] }
+      ]
+    }
+  ]
+};
+
+// ── STATE ─────────────────────────────────────────────────
+let isAdmin = false;
+let activeCat = 'all';
+let searchTerm = '';
+
+// ── RENDER ────────────────────────────────────────────────
+function getCatClass(id) {
+  return id;
+}
+
+function renderAll() {
+  renderSections();
+  renderSidebar();
+  applyFilters();
+}
+
+function renderSidebar() {
+  const el = document.getElementById('sidebarSections');
+  el.innerHTML = DATA.sections.map(s => `
+    <a class="sb-link" href="#sec-${s.id}" data-sec="sec-${s.id}">
+      <span class="sb-dot" style="background:${s.color}"></span>${s.name}
+    </a>
+  `).join('');
+  setupScrollSpy();
+}
+
+function bold(t) {
+  return t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
+function renderSections() {
+  const container = document.getElementById('sectionsContainer');
+  container.innerHTML = DATA.sections.map(s => `
+    <div class="gl-section" id="sec-${s.id}" data-section-id="${s.id}">
+      <div class="gl-sec-header">
+        <div class="gl-sec-dot" style="background:${s.color}"></div>
+        <span class="gl-sec-title">${s.name}</span>
+        <div class="gl-sec-line"></div>
+        <div class="section-admin-controls">
+          <button class="btn-edit-sec" onclick="openSectionModal('${s.id}')">Editar</button>
+          <button class="btn-move-sec" onclick="moveSection('${s.id}',-1)">↑</button>
+          <button class="btn-move-sec" onclick="moveSection('${s.id}',1)">↓</button>
+          <button class="btn-del-sec" onclick="confirmDeleteSection('${s.id}')">Excluir</button>
+        </div>
+      </div>
+      <div class="cards-stack" id="stack-${s.id}">
+        ${s.cards.map(c => renderCard(c, s.id)).join('')}
+      </div>
+      ${isAdmin ? `<button style="margin-top:10px;padding:7px 14px;background:var(--bg-2);border:1.5px dashed var(--line-mid);border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;color:var(--ink-3);cursor:pointer;width:100%" onclick="openCardModal(null,'${s.id}')">+ Adicionar indicador nesta seção</button>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderCard(c, sectionId) {
+  const detailHtml = c.details && c.details.length ? `
+    <div class="card-detail">
+      ${c.details.map(d => `
+        <div class="detail-item">
+          <div class="detail-lbl">${d.label}</div>
+          <div class="detail-txt">${d.text}${d.callout ? `<div class="callout ${d.callout}"><span>${d.callout==='info'?'ℹ':d.callout==='warn'?'⚠':'✓'}</span>${d.callout==='info'?'Dado parcial do mês corrente.':d.callout==='warn'?'Atenção ao comparar períodos.':'Confirmado.'}</div>`:''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      Ver detalhes
+    </button>` : '';
+  return `
+    <div class="card" data-cat="${sectionId}" data-card-id="${c.id}" data-section-id="${sectionId}">
+      <div class="card-admin-controls">
+        <button class="btn-edit-card" onclick="openCardModal('${c.id}','${sectionId}')" title="Editar">✎</button>
+        <button class="btn-del-card" onclick="confirmDeleteCard('${c.id}','${sectionId}')" title="Excluir">✕</button>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-name">${c.name}</div>
+          <span class="card-tag ${sectionId}">${DATA.sections.find(s=>s.id===sectionId)?.name||sectionId}</span>
+        </div>
+        <div class="card-formula-row">
+          <span class="card-formula-lbl">${c.formulaLabel}</span>
+          <span class="card-formula">${c.formula}</span>
+        </div>
+        <div class="card-desc">${c.desc}</div>
+        ${detailHtml}
+      </div>
+    </div>`;
+}
+
+// ── TOGGLE CARD ───────────────────────────────────────────
 function toggleCard(btn) {
-  const detail = btn.closest('.card-body').nextElementSibling;
+  const body = btn.closest('.card-body');
+  const detail = body.querySelector('.card-detail');
+  if (!detail) return;
   const open = detail.classList.toggle('open');
   btn.classList.toggle('open', open);
   btn.setAttribute('aria-expanded', open);
-  const t = [...btn.childNodes].find(n => n.nodeType === 3);
+  const t = [...btn.childNodes].find(n => n.nodeType===3);
   if (t) t.textContent = open ? ' Ver menos' : ' Ver detalhes';
 }
 
-let activeCat = 'all';
+// ── FILTER / SEARCH ───────────────────────────────────────
+let activeCatFilter = 'all';
 function filterCat(cat, el) {
-  activeCat = cat;
+  activeCatFilter = cat;
   applyFilters();
   document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
   el.classList.add('active');
   return false;
 }
 
-const searchInput = document.getElementById('searchInput');
-const searchBadge = document.getElementById('searchBadge');
-let searchTerm = '';
-
-searchInput.addEventListener('input', e => {
+document.getElementById('searchInput').addEventListener('input', e => {
   searchTerm = e.target.value.toLowerCase().trim();
   applyFilters();
 });
@@ -923,10 +683,9 @@ function applyFilters() {
   const allCards = document.querySelectorAll('.card');
   let visible = 0;
   allCards.forEach(card => {
-    const catOk    = activeCat === 'all' || card.dataset.cat === activeCat;
-    const body     = card.textContent.toLowerCase();
-    const terms    = (card.dataset.terms || '') + ' ' + (card.querySelector('.card-name')?.textContent || '');
-    const searchOk = searchTerm === '' || terms.toLowerCase().includes(searchTerm) || body.includes(searchTerm);
+    const catOk = activeCatFilter === 'all' || card.dataset.cat === activeCatFilter;
+    const body = card.textContent.toLowerCase();
+    const searchOk = searchTerm === '' || body.includes(searchTerm);
     card.style.display = (catOk && searchOk) ? '' : 'none';
     if (catOk && searchOk) visible++;
   });
@@ -936,21 +695,412 @@ function applyFilters() {
     sec.style.display = any ? '' : 'none';
   });
   const total = allCards.length;
-  searchBadge.textContent = (searchTerm && visible < total) ? visible : '';
+  document.getElementById('searchBadge').textContent = (searchTerm && visible < total) ? visible : '';
   document.getElementById('emptyState').classList.toggle('show', visible === 0);
 }
 
-// scroll spy
-const sections = document.querySelectorAll('.gl-section[id]');
-const navLinks  = document.querySelectorAll('.sb-link[data-sec]');
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      navLinks.forEach(l => l.classList.toggle('active', l.dataset.sec === e.target.id));
-    }
+// ── SCROLL SPY ────────────────────────────────────────────
+function setupScrollSpy() {
+  const secs = document.querySelectorAll('.gl-section[id]');
+  const links = document.querySelectorAll('.sb-link[data-sec]');
+  if (window._spyObserver) window._spyObserver.disconnect();
+  window._spyObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting)
+        links.forEach(l => l.classList.toggle('active', l.dataset.sec === e.target.id));
+    });
+  }, { rootMargin:'-20% 0px -70% 0px' });
+  secs.forEach(s => window._spyObserver.observe(s));
+}
+
+// ── ADMIN AUTH ────────────────────────────────────────────
+const PASS_HASH = btoa('admin403293');
+
+function openLoginModal() {
+  if (isAdmin) { logoutAdmin(); return; }
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('loginOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('loginPassword').focus(), 100);
+}
+
+function closeLoginModal() {
+  document.getElementById('loginOverlay').classList.remove('show');
+}
+
+function doLogin() {
+  const val = document.getElementById('loginPassword').value;
+  if (btoa(val) === PASS_HASH) {
+    isAdmin = true;
+    closeLoginModal();
+    document.getElementById('adminBar').classList.add('show');
+    document.getElementById('btnAdminLogin').classList.add('active');
+    document.getElementById('btnAdminLogin').innerHTML = `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Admin ativo`;
+    document.querySelector('.layout').classList.add('admin-mode');
+    renderAll();
+    document.getElementById('mainContent').style.paddingBottom = '80px';
+  } else {
+    document.getElementById('loginError').classList.add('show');
+  }
+}
+
+function logoutAdmin() {
+  isAdmin = false;
+  document.getElementById('adminBar').classList.remove('show');
+  document.getElementById('btnAdminLogin').classList.remove('active');
+  document.getElementById('btnAdminLogin').innerHTML = `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Admin`;
+  document.querySelector('.layout').classList.remove('admin-mode');
+  renderAll();
+}
+
+// ── MODAL HELPERS ─────────────────────────────────────────
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+// ── ARCH MODAL ────────────────────────────────────────────
+function openArchModal() {
+  document.getElementById('archNoteInput').value = DATA.archNote;
+  document.getElementById('archOverlay').classList.add('show');
+}
+function saveArchNote() {
+  DATA.archNote = document.getElementById('archNoteInput').value;
+  document.getElementById('archNote').innerHTML = bold(DATA.archNote);
+  closeModal('archOverlay');
+}
+
+// ── SECTION MODAL ─────────────────────────────────────────
+function openSectionModal(id) {
+  const s = id ? DATA.sections.find(s => s.id === id) : null;
+  document.getElementById('sectionModalTitle').textContent = s ? 'Editar Seção' : 'Nova Seção';
+  document.getElementById('sectionEditId').value = id || '';
+  document.getElementById('sectionName').value = s ? s.name : '';
+  document.getElementById('sectionCat').value = s ? s.id : '';
+  document.getElementById('sectionCat').disabled = !!s;
+  document.getElementById('sectionColor').value = s ? s.color : '#1A56E8';
+  document.getElementById('sectionOverlay').classList.add('show');
+}
+
+function saveSection() {
+  const editId = document.getElementById('sectionEditId').value;
+  const name = document.getElementById('sectionName').value.trim();
+  const cat = document.getElementById('sectionCat').value.trim().toLowerCase().replace(/\s+/g,'_');
+  const color = document.getElementById('sectionColor').value;
+  if (!name || !cat) { alert('Preencha nome e categoria.'); return; }
+  if (editId) {
+    const s = DATA.sections.find(s => s.id === editId);
+    s.name = name; s.color = color;
+  } else {
+    if (DATA.sections.find(s => s.id === cat)) { alert('Categoria já existe.'); return; }
+    DATA.sections.push({ id: cat, name, color, cards: [] });
+  }
+  closeModal('sectionOverlay');
+  renderAll();
+}
+
+// ── CARD MODAL ────────────────────────────────────────────
+function openCardModal(cardId, sectionId) {
+  const section = sectionId ? DATA.sections.find(s => s.id === sectionId) : DATA.sections[0];
+  const card = cardId ? section?.cards.find(c => c.id === cardId) : null;
+  document.getElementById('cardModalTitle').textContent = card ? 'Editar Indicador' : 'Novo Indicador';
+  document.getElementById('cardEditCardId').value = cardId || '';
+  document.getElementById('cardEditSectionId').value = sectionId || DATA.sections[0]?.id || '';
+  document.getElementById('cardName').value = card ? card.name : '';
+  document.getElementById('cardFormulaLabel').value = card ? card.formulaLabel : '';
+  document.getElementById('cardFormula').value = card ? card.formula : '';
+  document.getElementById('cardDesc').value = card ? card.desc : '';
+
+  // populate section dropdown
+  const sel = document.getElementById('cardSection');
+  sel.innerHTML = DATA.sections.map(s => `<option value="${s.id}" ${s.id === (sectionId||DATA.sections[0]?.id) ? 'selected':''}>${s.name}</option>`).join('');
+
+  // populate detail entries
+  const container = document.getElementById('detailEntries');
+  container.innerHTML = '';
+  if (card && card.details) card.details.forEach(d => addDetailEntry(d));
+
+  document.getElementById('cardOverlay').classList.add('show');
+}
+
+function addDetailEntry(d) {
+  const container = document.getElementById('detailEntries');
+  const idx = container.children.length;
+  const div = document.createElement('div');
+  div.className = 'detail-entry';
+  div.innerHTML = `
+    <button class="detail-entry-remove" onclick="this.closest('.detail-entry').remove()">×</button>
+    <div class="form-group" style="margin-bottom:8px">
+      <label class="form-label">Título do bloco</label>
+      <input class="form-input detail-label-input" type="text" value="${d ? d.label : ''}" placeholder="ex: Fonte, Coluna na tabela">
+    </div>
+    <div class="form-group" style="margin-bottom:8px">
+      <label class="form-label">Texto</label>
+      <textarea class="form-textarea detail-text-input" rows="2">${d ? d.text : ''}</textarea>
+    </div>
+    <div class="form-group" style="margin-bottom:0">
+      <label class="form-label">Callout (opcional)</label>
+      <select class="form-select detail-callout-input">
+        <option value="" ${!d?.callout?'selected':''}>Nenhum</option>
+        <option value="info" ${d?.callout==='info'?'selected':''}>ℹ Info</option>
+        <option value="warn" ${d?.callout==='warn'?'selected':''}>⚠ Atenção</option>
+        <option value="ok" ${d?.callout==='ok'?'selected':''}>✓ OK</option>
+      </select>
+    </div>`;
+  container.appendChild(div);
+}
+
+function saveCard() {
+  const sectionId = document.getElementById('cardSection').value;
+  const cardId = document.getElementById('cardEditCardId').value;
+  const name = document.getElementById('cardName').value.trim();
+  const formulaLabel = document.getElementById('cardFormulaLabel').value.trim();
+  const formula = document.getElementById('cardFormula').value.trim();
+  const desc = document.getElementById('cardDesc').value.trim();
+  if (!name || !desc) { alert('Preencha pelo menos o nome e a descrição.'); return; }
+
+  const details = [];
+  document.querySelectorAll('#detailEntries .detail-entry').forEach(entry => {
+    const label = entry.querySelector('.detail-label-input').value.trim();
+    const text = entry.querySelector('.detail-text-input').value.trim();
+    const callout = entry.querySelector('.detail-callout-input').value;
+    if (label || text) details.push({ label, text, callout: callout || undefined });
   });
-}, { rootMargin: '-20% 0px -70% 0px' });
-sections.forEach(s => io.observe(s));
+
+  const section = DATA.sections.find(s => s.id === sectionId);
+  if (!section) return;
+
+  if (cardId) {
+    // find card in any section and move if needed
+    DATA.sections.forEach(s => {
+      const i = s.cards.findIndex(c => c.id === cardId);
+      if (i > -1) s.cards.splice(i, 1);
+    });
+    section.cards.push({ id: cardId, name, formulaLabel, formula, desc, details });
+  } else {
+    const newId = 'c' + Date.now();
+    section.cards.push({ id: newId, name, formulaLabel, formula, desc, details });
+  }
+
+  closeModal('cardOverlay');
+  renderAll();
+}
+
+// ── DELETE ────────────────────────────────────────────────
+function confirmDeleteSection(id) {
+  const s = DATA.sections.find(s => s.id === id);
+  document.getElementById('deleteMsg').textContent = `Excluir a seção "${s.name}" e todos os seus ${s.cards.length} indicadores? Esta ação não pode ser desfeita.`;
+  document.getElementById('deleteConfirmBtn').onclick = () => { doDeleteSection(id); closeModal('deleteOverlay'); };
+  document.getElementById('deleteOverlay').classList.add('show');
+}
+function doDeleteSection(id) {
+  DATA.sections = DATA.sections.filter(s => s.id !== id);
+  renderAll();
+}
+
+function confirmDeleteCard(cardId, sectionId) {
+  const s = DATA.sections.find(s => s.id === sectionId);
+  const c = s?.cards.find(c => c.id === cardId);
+  document.getElementById('deleteMsg').textContent = `Excluir o indicador "${c?.name}"? Esta ação não pode ser desfeita.`;
+  document.getElementById('deleteConfirmBtn').onclick = () => { doDeleteCard(cardId, sectionId); closeModal('deleteOverlay'); };
+  document.getElementById('deleteOverlay').classList.add('show');
+}
+function doDeleteCard(cardId, sectionId) {
+  const s = DATA.sections.find(s => s.id === sectionId);
+  if (s) s.cards = s.cards.filter(c => c.id !== cardId);
+  renderAll();
+}
+
+// ── MOVE SECTION ──────────────────────────────────────────
+function moveSection(id, dir) {
+  const idx = DATA.sections.findIndex(s => s.id === id);
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= DATA.sections.length) return;
+  [DATA.sections[idx], DATA.sections[newIdx]] = [DATA.sections[newIdx], DATA.sections[idx]];
+  renderAll();
+}
+
+// ── EXPORT ────────────────────────────────────────────────
+function openExportModal() { document.getElementById('exportOverlay').classList.add('show'); }
+
+function downloadHTML() {
+  const html = generateCleanHTML();
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'glossario_exa_cloud.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function generateCleanHTML() {
+  // Build clean static HTML from current DATA state
+  const sectionsHtml = DATA.sections.map(s => {
+    const cardsHtml = s.cards.map(c => {
+      const tagClass = s.id;
+      const detailHtml = c.details && c.details.length ? `
+      <button class="card-toggle" onclick="toggleCard(this)" aria-expanded="false">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        Ver detalhes
+      </button>
+      <div class="card-detail">
+        ${c.details.map(d => {
+          const calloutHtml = d.callout ? `<div class="callout ${d.callout}"><span>${d.callout==='info'?'ℹ':d.callout==='warn'?'⚠':'✓'}</span> ${d.text}</div>` : '';
+          return `<div class="detail-item"><div class="detail-lbl">${d.label}</div><div class="detail-txt">${calloutHtml || d.text}</div></div>`;
+        }).join('')}
+      </div>` : '';
+
+      return `
+        <div class="card" data-cat="${s.id}">
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">${c.name}</div>
+              <span class="card-tag ${tagClass}">${s.name}</span>
+            </div>
+            <div class="card-formula-row">
+              <span class="card-formula-lbl">${c.formulaLabel}</span>
+              <span class="card-formula">${c.formula.replace(/\n/g,'&#10;')}</span>
+            </div>
+            <div class="card-desc">${c.desc}</div>
+            ${detailHtml}
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="gl-section" id="sec-${s.id}">
+        <div class="gl-sec-header">
+          <div class="gl-sec-dot" style="background:${s.color}"></div>
+          <span class="gl-sec-title">${s.name}</span>
+          <div class="gl-sec-line"></div>
+        </div>
+        <div class="cards-stack">${cardsHtml}</div>
+      </div>`;
+  }).join('');
+
+  const sidebarLinks = DATA.sections.map(s => `
+    <a class="sb-link" href="#sec-${s.id}" data-sec="sec-${s.id}">
+      <span class="sb-dot" style="background:${s.color}"></span>${s.name}
+    </a>`).join('');
+
+  // inject current DATA as JSON for re-edit
+  const dataJson = JSON.stringify(DATA).replace(/</g,'\\u003c');
+
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossário — EXA Cloud Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+${getStyles()}
+</head>
+<body>
+<header class="topbar">
+  <span class="topbar-logo">EXA Cloud</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-title">Glossário do Dashboard</span>
+  <div class="topbar-right">
+    <div class="search-wrap">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Buscar indicador…" aria-label="Buscar">
+      <span class="search-badge" id="searchBadge"></span>
+    </div>
+    <button class="btn-admin-login" id="btnAdminLogin" onclick="openLoginModal()">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Admin
+    </button>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-group">
+      <div class="sidebar-label">Referência</div>
+      <a class="sb-link" href="#sec-arquitetura">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Arquitetura
+      </a>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sidebar-group">
+      <div class="sidebar-label">Indicadores</div>
+      <div id="sidebarSections">${sidebarLinks}</div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sidebar-group">
+      <div class="sidebar-label">Filtrar</div>
+      <button class="sb-link active" onclick="filterCat('all',this)"><span class="sb-dot" style="background:var(--line-mid)"></span>Todos</button>
+      ${DATA.sections.map(s=>`<button class="sb-link" onclick="filterCat('${s.id}',this)"><span class="sb-dot" style="background:${s.color}"></span>Só ${s.name}</button>`).join('')}
+    </div>
+  </nav>
+  <main class="content" id="mainContent">
+    <div class="page-header">
+      <div class="page-eyebrow">EXA Cloud · Dashboard Analytics</div>
+      <h1>Glossário de Indicadores</h1>
+      <p>Definições de cada indicador presente no dashboard — como é construído, de onde vêm os dados e o que cada campo representa. A análise dos números acontece no dashboard; este glossário é a referência para entendê-los.</p>
+      <div class="meta-row">
+        <div class="meta-item">Período: <strong>Jan/2026 – Atual</strong></div>
+        <div class="meta-item">Fonte primária: <strong>GA4 via BigQuery</strong></div>
+        <div class="meta-item">Fonte secundária: <strong>Google Play + App Store</strong></div>
+        <div class="meta-item">Granularidade: <strong>Diária, agrupada por mês</strong></div>
+      </div>
+    </div>
+    <div class="arch-wrap gl-section" id="sec-arquitetura">
+      <div class="gl-sec-label-standalone">De onde vêm os números</div>
+      <div class="arch-box">
+        <div class="arch-flow">
+          <div class="arch-node"><div class="arch-node-lbl">Origem 1</div><div class="arch-node-name">Eventos in-app</div><div class="arch-node-sub">SDK GA4 · Android + iOS</div></div>
+          <span class="arch-arrow">→</span>
+          <div class="arch-node"><div class="arch-node-lbl">Coleta</div><div class="arch-node-name">Google Analytics 4</div><div class="arch-node-sub">Propriedade Firebase/GA4</div></div>
+          <span class="arch-arrow">→</span>
+          <div class="arch-node hl"><div class="arch-node-lbl">Processamento</div><div class="arch-node-name">BigQuery</div><div class="arch-node-sub">fact_cloud_behavior</div></div>
+          <span class="arch-arrow">→</span>
+          <div class="arch-node hl"><div class="arch-node-lbl">Agregação</div><div class="arch-node-name">BigQuery</div><div class="arch-node-sub">aggr_base_instalada_cloud</div></div>
+          <span class="arch-arrow">→</span>
+          <div class="arch-node"><div class="arch-node-lbl">Visualização</div><div class="arch-node-name">Looker Studio</div><div class="arch-node-sub">Dashboard EXA Cloud</div></div>
+        </div>
+        <div class="arch-note" id="archNote">${bold(DATA.archNote)}</div>
+      </div>
+    </div>
+    <div id="sectionsContainer">${sectionsHtml}</div>
+    <div class="empty" id="emptyState"><p style="font-size:14px">Nenhum indicador encontrado.</p><p style="font-size:13px;margin-top:6px">Tente outro termo de busca.</p></div>
+  </main>
+</div>
+<footer class="footer"><span>EXA Cloud · Glossário de Indicadores</span><span>GA4 + BigQuery + Google Sheets · Atualização diária</span></footer>
+${getAdminMarkup()}
+<script>
+var DATA = ${dataJson};
+${getClientScript()}
+<\/script>
+</body>
+</html>`;
+}
+
+function getStyles() {
+  // return the full <style> block from this file
+  const styleEl = document.querySelector('style');
+  return `<style>${styleEl.textContent}<\/style>`;
+}
+
+function getAdminMarkup() {
+  return document.querySelector('.admin-bar').outerHTML +
+    document.getElementById('loginOverlay').outerHTML +
+    document.getElementById('archOverlay').outerHTML +
+    document.getElementById('sectionOverlay').outerHTML +
+    document.getElementById('cardOverlay').outerHTML +
+    document.getElementById('deleteOverlay').outerHTML +
+    document.getElementById('exportOverlay').outerHTML;
+}
+
+function getClientScript() {
+  // return all script content (self-referential — gets script tag content)
+  const scripts = document.querySelectorAll('script');
+  let src = '';
+  scripts.forEach(s => { if (!s.src) src += s.textContent; });
+  return src.replace(/<\/script>/gi, '<\\/script>');
+}
+
+// ── INIT ──────────────────────────────────────────────────
+renderAll();
 </script>
 </body>
 </html>
