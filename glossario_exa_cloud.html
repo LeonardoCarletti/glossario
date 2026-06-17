@@ -513,53 +513,270 @@ body{font-family:'Inter',sans-serif;background:var(--bg-2);color:var(--ink);line
 <script>
 // ── DATA ──────────────────────────────────────────────────
 let DATA = {
-  archNote: "**Origem 2 — Dados de Loja (Google Play + App Store):** planilha com downloads e desinstalações iOS, alimentada manualmente. Entra no dashboard via blend no Looker Studio. O iOS recebe tratamento separado porque o sistema não permite que o app envie eventos de remoção — a única fonte disponível são os relatórios da Apple.",
+  archNote: "Os números do dashboard vêm de duas fontes. A primeira é o GA4 exportado para o BigQuery — captura tudo que acontece dentro do app: aberturas, uploads, downloads, logins, interações. A segunda são as consoles das lojas (Google Play e App Store Connect), cujos dados chegam via planilha atualizada manualmente. No Looker Studio, as duas fontes são combinadas via blend para compor os gráficos que cruzam comportamento in-app com dados de distribuição.",
   sections: [
     {
       id: "aquisicao", name: "Aquisição", color: "#1A56E8",
       cards: [
-        { id:"c1", name:"Downloads Totais", formulaLabel:"Composição", formula:"Downloads Android (Play Store) + Downloads iOS (App Store)", desc:"Total de vezes que o EXA Cloud foi baixado nas duas lojas no período. É o topo do funil — quantas pessoas demonstraram intenção de instalar o app.", details:[{label:"Fonte",text:"Planilha de dados de loja — extraída manualmente das consoles do Google Play e Apple App Store, incorporada ao dashboard via blend."},{label:"Download vs. Instalação",text:"Download é o ato de baixar da loja. Instalação (First Open) é quando o app é aberto pela primeira vez. A diferença entre os dois são usuários que baixaram mas nunca abriram."}] },
-        { id:"c2", name:"Instalações — First Open", formulaLabel:"Evento GA4", formula:"first_open", desc:"Número de vezes que o app foi aberto pela primeira vez em um dispositivo. Dispara uma única vez por instalação — é o indicador mais confiável de instalações reais.", details:[{label:"Tabela de origem",text:"fact_cloud_behavior — coluna fl_instalacao (boolean). Verdadeiro quando a sessão contém o evento first_open."},{label:"Nota sobre mês corrente",text:"Quedas no mês corrente são esperadas — o período ainda está incompleto na extração. Para comparações, use meses fechados.",callout:"info"}] },
-        { id:"c3", name:"Total Users", formulaLabel:"Composição", formula:"COUNT DISTINCT(user_pseudo_id) no período", desc:"Total de dispositivos únicos que geraram ao menos um evento no GA4. Cada dispositivo recebe um identificador anônimo único (user_pseudo_id) atribuído automaticamente pelo GA4.", details:[{label:"Dispositivo vs. Conta",text:"O user_pseudo_id identifica o dispositivo, não a conta. Um usuário com dois celulares aparece como dois registros. O identificador de conta (user_id) fica disponível após login, mas Total Users usa sempre o pseudo_id."}] },
-        { id:"c4", name:"Sessões Totais", formulaLabel:"Flag", formula:"fl_sessao = true\n← COUNT DISTINCT(session_id) com session_id válido", desc:"Total de sessões registradas pelo GA4, incluindo sessões geradas por processos automáticos do app — como sync em background — sem nenhuma interação do usuário. Uma sessão aqui não representa necessariamente um acesso humano ativo.", details:[{label:"Quando usar",text:"Para medir volume total de atividade do app, incluindo processos automáticos. Não use para análise de comportamento do usuário ou métricas que vão para stakeholders."},{label:"Disclaimer",text:"Sessões totais inclui toda sessão com session_id válido, incluindo sessões automáticas (sync em background) sem interação humana. Para análise de comportamento real, use Sessões com Uso.",callout:"warn"},{label:"Sessões vs. Usuários",text:"Sessões sempre são ≥ Usuários. Quando Sessões > Usuários, parte dos usuários voltou ao app mais de uma vez no período."}] },
-        { id:"c4b", name:"Sessões com Uso", formulaLabel:"Flag", formula:"fl_sessao_com_uso = true\n← tempo_sessao_sec > 0", desc:"Sessões em que o usuário esteve ativamente com o app em primeiro plano e interagiu — o GA4 capturou ao menos um evento user_engagement com tempo maior que zero. Exclui processos automáticos de background.", details:[{label:"Quando usar",text:"Para qualquer análise de comportamento, engajamento ou métrica que vá para o TIM. É o corte correto para MAU, DAU e retenção."},{label:"Disclaimer",text:"Sessões com uso considera apenas sessões com tempo de engajamento maior que zero — uso humano ativo. Sessões de background (sync automático, notificações) ficam de fora.",callout:"ok"},{label:"Coluna na tabela",text:"fl_sessao_com_uso (boolean) em fact_cloud_behavior. Calculada como tempo_sessao_sec > 0, onde tempo_sessao_sec é a soma de engagement_time_msec da sessão convertida para segundos."}] },
-        { id:"c5", name:"Desinstalações", formulaLabel:"Composição", formula:"Android: evento app_remove (GA4)\niOS: coluna Desinstalacoes_IOS (planilha de loja)", desc:"Remoções do app no período, combinando duas fontes. Android e iOS têm origens diferentes — quando o usuário desinstala no iPhone, o sistema encerra o processo imediatamente, sem que o app consiga enviar eventos.", details:[{label:"Tabela de origem",text:"fact_cloud_behavior — coluna fl_desinstalacao para Android. iOS entra via blend com a planilha de loja."}] }
+        {
+          id:"c1", name:"Downloads",
+          formulaLabel:"Medida",
+          formula:"SUM(Total Downloads)\n← planilha Google Play Console + App Store Connect",
+          desc:"Total de vezes que o EXA Cloud foi baixado nas lojas no período. Representa o topo do funil — quantas pessoas chegaram até o produto e decidiram instalar. No período jan–jun/2026 foram 62.020 downloads. O acumulado histórico desde o lançamento é 721.135.",
+          details:[
+            {label:"De onde vem",text:"Não está no GA4. Vem de planilha alimentada manualmente com dados do Google Play Console e App Store Connect. Qualquer defasagem na atualização da planilha reflete diretamente nesse número."},
+            {label:"Download não é instalação",text:"Download é o clique em 'Instalar' na loja. Instalação é quando o usuário abre o app pela primeira vez. A diferença entre os dois são pessoas que baixaram mas nunca chegaram a usar."}
+          ]
+        },
+        {
+          id:"c2", name:"Instalações — First Open",
+          formulaLabel:"Medida",
+          formula:"COUNT_DISTINCT(IF(fl_instalacao = TRUE, user_pseudo_id, NULL))\n← evento GA4: first_open\n← campo na base: fl_instalacao (boolean)",
+          desc:"Quantos dispositivos únicos abriram o EXA Cloud pela primeira vez no período. O evento first_open dispara uma única vez por instalação — no momento exato da primeira abertura. É o número mais confiável de instalações reais porque ignora downloads que nunca viraram uso efetivo. No período jan–jun/2026 foram 9.339 instalações.",
+          details:[
+            {label:"Como o campo é criado na base",text:"Na tabela fact_cloud_behavior, fl_instalacao = true quando a sessão contém o evento first_open. Calculado via LOGICAL_OR por sessão no Dataform. Um dispositivo que instala o app em janeiro e o usa todos os meses seguintes gera fl_instalacao = true apenas na sessão de janeiro."},
+            {label:"Como aparece no dashboard",text:"Scorecard 'Instalações' no funil de Aquisição e no cabeçalho global. Gráfico 'Instalações mensais — First Open por usuário único' com dimensão year_month_date — cada ponto representa dispositivos únicos com first_open naquele mês."},
+            {label:"Mês corrente parcial",text:"O número do mês em andamento sempre aparece menor. O GA4 envia eventos com até 3 dias de atraso em dispositivos que ficaram sem internet. Para comparações entre períodos, use meses fechados.",callout:"info"}
+          ]
+        },
+        {
+          id:"c3", name:"Login com Sucesso",
+          formulaLabel:"Medida",
+          formula:"COUNT_DISTINCT(IF(fl_login_success = TRUE, user_pseudo_id, NULL))\n← evento GA4: successful_login\n← campo na base: fl_login_success (boolean)",
+          desc:"Quantos dispositivos únicos completaram o login no período. É o primeiro indicador de usuário autenticado — a partir daqui o app sabe com quem está falando e consegue associar o comportamento a uma conta. No período foram 441 usuários com login bem-sucedido.",
+          details:[
+            {label:"Como o campo é criado na base",text:"Na fact_cloud_behavior, fl_login_success = true quando a sessão contém o evento successful_login. Calculado via LOGICAL_OR por sessão — se o usuário logou em qualquer momento da sessão, o campo fica verdadeiro para toda ela."},
+            {label:"Taxa de conversão no funil",text:"A taxa Instalações→Login é calculada como COUNT_DISTINCT(fl_login_success) / COUNT_DISTINCT(fl_instalacao). No período jan–jun/2026 ficou em 4,72% — de cada 100 dispositivos que instalaram, cerca de 5 chegaram a fazer login."},
+            {label:"Usuário elegível",text:"fl_usuario_elegivel = fl_login_success. Essa flag é usada como filtro em análises que exigem conta autenticada — como análises de retenção por user_id.",callout:"info"}
+          ]
+        },
+        {
+          id:"c3b", name:"Usuários Engajados — features",
+          formulaLabel:"Medida",
+          formula:"COUNT_DISTINCT(IF(fl_engajamento_feature = TRUE, user_pseudo_id, NULL))\n← campo na base: fl_engajamento_feature (boolean)",
+          desc:"Quantos dispositivos únicos interagiram com ao menos uma funcionalidade de produto no período. Não basta abrir o app — o usuário precisa ter feito algo concreto: upload, download, criação de pasta, ativação de auto-sync, compartilhamento, adição de favorito, uso de galeria, álbuns, destaques, liberar espaço ou busca. No período foram 4.633 usuários engajados.",
+          details:[
+            {label:"Como o campo é criado na base",text:"fl_engajamento_feature = true quando qualquer uma dessas condições é verdadeira na sessão: qtd_upload_total > 0, qtd_download_total > 0, qtd_pastas_criadas > 0, fl_auto_sync_ativado, fl_trash_emptied, fl_compartilhamento, fl_favorite_added, fl_fs_gallery, fl_fs_albums, fl_fs_highlights, fl_fs_free_up_space, fl_search, fl_content_view ou fl_video_start. O campo é calculado diretamente no SELECT do Dataform, combinando todos esses sinais."},
+            {label:"Como aparece no dashboard",text:"Scorecard 'Usuários Engajados Features' no bloco de Engajamento. Gráfico 'Usuários engajados — interação com funcionalidades' com linha azul mostrando evolução mensal. No mesmo gráfico, uma segunda linha laranja mostra os usuários com Auto-Sync ON para comparação direta."},
+            {label:"Taxa de conversão no funil",text:"A taxa Login→Engajados aparece no funil com resultado acima de 100% — isso acontece porque usuários conseguem interagir com funcionalidades sem ter feito login registrado na mesma sessão. Esse comportamento está documentado e será corrigido na próxima atualização da base.",callout:"info"}
+          ]
+        },
+        {
+          id:"c3c", name:"Usuários com Upload",
+          formulaLabel:"Medida",
+          formula:"COUNT_DISTINCT(IF(fl_engajamento_upload = TRUE, user_pseudo_id, NULL))\n← campo na base: fl_engajamento_upload (boolean)",
+          desc:"Quantos dispositivos únicos fizeram ao menos um upload no período. É o subconjunto mais importante dos usuários engajados — representa quem usou a funcionalidade central do produto. No período foram 2.474 usuários, 53,4% dos engajados.",
+          details:[
+            {label:"Como o campo é criado na base",text:"fl_engajamento_upload = true quando qtd_upload_total > 0 na sessão. qtd_upload_total é a soma de todos os eventos de envio de arquivo na sessão: file_upload_image, file_upload_video, file_upload_audio, file_upload_document, file_upload_generic e file_upload_complete."},
+            {label:"Taxa de conversão no funil",text:"Taxa Engajados→Upload = COUNT_DISTINCT(fl_engajamento_upload) / COUNT_DISTINCT(fl_engajamento_feature). Resultado: 53,4% — pouco mais da metade dos usuários que interagem com alguma feature chega a fazer um upload."}
+          ]
+        },
+        {
+          id:"c4", name:"Sessões Totais",
+          formulaLabel:"O que conta",
+          formula:"fl_sessao = true\n→ toda sessão com session_id válido",
+          desc:"Total de sessões registradas pelo GA4 no período, incluindo sessões iniciadas por processos automáticos do app — como sync em background — sem que o usuário tenha aberto o app. Uma sessão aqui não representa necessariamente um acesso humano ativo.",
+          details:[
+            {label:"Sessões de background",text:"No Android, o sistema operacional pode acordar o app para verificações automáticas. Essas interações geram sessões no GA4 com tempo de engajamento zero. No período jan–jun/2026, 55,65% de todas as sessões tiveram tempo de uso igual a zero."},
+            {label:"Para medir uso real",text:"Use o indicador Sessões com Uso (fl_sessao_com_uso = true), que filtra apenas sessões onde o usuário estava ativamente com o app em primeiro plano."}
+          ]
+        },
+        {
+          id:"c4b", name:"Sessões com Uso",
+          formulaLabel:"O que conta",
+          formula:"fl_sessao_com_uso = true\n→ sessões com tempo_sessao_sec > 0\n← campo na base: fl_sessao_com_uso (boolean)",
+          desc:"Sessões onde o usuário abriu o app e ficou com ele em primeiro plano. O GA4 captura o tempo de engajamento — se for maior que zero, o usuário estava lá. Esse campo é o filtro padrão para todos os indicadores de comportamento real: MAU, DAU, Auto-Sync e tempo de sessão.",
+          details:[
+            {label:"Como o campo é criado na base",text:"fl_sessao_com_uso = (tempo_sessao_sec > 0), onde tempo_sessao_sec é a soma de engagement_time_msec dos eventos user_engagement da sessão, convertida para segundos. Calculado no SELECT do Dataform."},
+            {label:"Uso nos indicadores de Auto-Sync",text:"Os indicadores Sync ON e Sync OFF filtram por fl_sessao_com_uso = true. Isso garante que sessões onde o sync rodou automaticamente em background não sejam contadas como uso ativo do usuário.",callout:"ok"}
+          ]
+        },
+        {
+          id:"c5", name:"Desinstalações",
+          formulaLabel:"Como é calculado",
+          formula:"Android: evento app_remove (GA4) → fl_desinstalacao\niOS: coluna Desinstalacoes_IOS (planilha de loja)",
+          desc:"Quantas vezes o app foi removido do dispositivo no período. Android e iOS usam fontes diferentes — quando o usuário desinstala no iPhone, o sistema encerra o processo imediatamente, sem que o app consiga enviar eventos.",
+          details:[
+            {label:"Por que iOS vem da loja",text:"No iOS o sistema encerra o processo ao remover o app, sem permitir que ele execute código. A única fonte confiável de desinstalações iOS é o App Store Connect."},
+            {label:"Uso no cálculo de Base Instalada",text:"As desinstalações são subtraídas das instalações acumuladas para gerar a Base Instalada Real. Se a planilha iOS estiver desatualizada, a base instalada iOS fica inflada."}
+          ]
+        }
       ]
     },
     {
       id: "engajamento", name: "Engajamento", color: "#6D28D9",
       cards: [
-        { id:"c6", name:"MAU — Usuários Ativos Mensais", formulaLabel:"Composição", formula:"COUNT DISTINCT(user_pseudo_id) com ≥ 1 sessão no mês", desc:"Dispositivos únicos que abriram e usaram o app ao menos uma vez no mês. O dashboard exibe dois cortes com significados diferentes — ler os disclaimers antes de referenciar os números.", details:[{label:"MAU com sessões (fl_sessao)",text:"Conta todos os dispositivos com ao menos uma sessão registrada, incluindo sessões de processos automáticos como sync em background, sem interação do usuário. Número mais alto — não representa exclusivamente uso humano ativo."},{label:"MAU com sessões engajadas (fl_sessao_com_uso)",text:"Conta apenas dispositivos com ao menos uma sessão onde o tempo de uso foi maior que zero. É o corte correto para análise de base ativa real. Use este para comparações e apresentações ao TIM."},{label:"Disclaimer",text:"MAU com sessões inclui processos automáticos do app. MAU com sessões engajadas filtra apenas interação ativa do usuário. Para análise de base ativa real, use sempre o segundo indicador.",callout:"warn"},{label:"Nota sobre mês corrente",text:"O mês corrente sempre aparece menor — está incompleto. Para comparações, use meses fechados com pelo menos 3 dias de defasagem.",callout:"info"}] },
-        { id:"c7", name:"DAU — Usuários Ativos Diários", formulaLabel:"Composição", formula:"COUNT DISTINCT(user_pseudo_id) com sessão no dia\n— fl_sessao_com_uso = true", desc:"Dispositivos únicos que abriram o app ativamente em cada dia — exibido nos últimos 30 dias. Usa fl_sessao_com_uso para excluir processos de background.", details:[{label:"DAU/MAU",text:"Dividir o DAU médio pelo MAU do mês mostra com que frequência os usuários ativos mensais voltam diariamente — chamado de stickiness. Quanto maior, mais habitual é o uso."},{label:"Problema identificado — user_pseudo_id duplicados",text:"Análise de cohort realizada em jun/2026 mostrou que apenas 8,5% dos usuários no período de retorno após os buracos de DAU tinham o mesmo user_pseudo_id do período anterior. Reinstalações e limpeza de cache do dispositivo geram novos IDs para o mesmo dispositivo físico, inflando o DAU e distorcendo métricas de retenção. O problema está relacionado ao bug de User ID em investigação pelo time de backend.",callout:"warn"},{label:"Zeros no gráfico",text:"Períodos com DAU = 0 foram identificados como problemas de pipeline ou coleta, não ausência real de usuários. O segundo buraco (31/mai–06/jun) teve 464 usuários com sessão ativa que não foram contabilizados no gráfico — problema de agregação, não de SDK.",callout:"warn"}] },
-        { id:"c8", name:"Tempo Médio por Sessão", formulaLabel:"Composição", formula:"AVG(SUM(engagement_time_msec ÷ 1000) por sessão)\n— apenas sessões com fl_sessao_com_uso = true", desc:"Média de segundos por sessão em que o usuário está ativamente com o app em primeiro plano. Tempo com app minimizado não é contabilizado.", details:[{label:"Coluna na tabela",text:"tempo_sessao_sec (float64) em fact_cloud_behavior. Calculada somando o parâmetro engagement_time_msec dos eventos user_engagement da sessão, convertido para segundos."}] },
-        { id:"c9", name:"Funil de Conversão de Login", formulaLabel:"Eventos GA4", formula:"login_screen_viewed → login → successful_login", desc:"Mede a taxa de conversão em cada etapa do login: quantos dispositivos chegam à tela, quantos tentam autenticar e quantos concluem com sucesso.", details:[{label:"Flags correspondentes",text:"fl_login_screen · fl_login_attempt · fl_login_success — todas boolean em fact_cloud_behavior, calculadas por sessão."},{label:"Elegibilidade",text:"A flag fl_usuario_elegivel é equivalente a fl_login_success. Usuário logado com sucesso é o critério de elegibilidade para análises que exigem conta autenticada."}] }
+        {
+          id:"c6", name:"MAU — Usuários Ativos Mensais",
+          formulaLabel:"Como é calculado",
+          formula:"COUNT_DISTINCT(user_pseudo_id) com fl_sessao_com_uso = true no mês",
+          desc:"Quantos dispositivos diferentes abriram o app ativamente ao menos uma vez no mês. Filtra sessões com uso real — background não entra. É o indicador de saúde do produto: se o MAU cresce, a base ativa cresce. Em maio/2026 atingiu o pico do período com 5,6 mil usuários ativos únicos.",
+          details:[
+            {label:"Por que fl_sessao_com_uso",text:"Sem esse filtro, o MAU incluiria dispositivos que o sistema acordou automaticamente sem interação do usuário. O filtro garante que o número representa apenas quem abriu e usou o app de verdade."},
+            {label:"Mês corrente parcial",text:"O mês em andamento sempre aparece menor nos gráficos porque os dados ainda não estão completos. Compare apenas meses fechados.",callout:"info"}
+          ]
+        },
+        {
+          id:"c7", name:"DAU — Usuários Ativos Diários",
+          formulaLabel:"Como é calculado",
+          formula:"COUNT_DISTINCT(user_pseudo_id) com fl_sessao_com_uso = true por dia",
+          desc:"Quantos dispositivos abriram o app ativamente em cada dia. É o pulso diário do produto — variações bruscas para baixo são o primeiro sinal de problema técnico ou de experiência. Já usa o filtro de sessão com uso real.",
+          details:[
+            {label:"Faixa normal do período",text:"No período mai–jun/2026 o DAU oscila entre 430 e 540 usuários por dia nos dias com dados completos."},
+            {label:"DAU/MAU",text:"Dividir o DAU médio pelo MAU do mês mostra com que frequência os usuários mensais voltam diariamente. Valores acima de 20% indicam que o produto faz parte da rotina."}
+          ]
+        },
+        {
+          id:"c8", name:"Tempo Médio por Sessão",
+          formulaLabel:"Como é calculado",
+          formula:"AVG(tempo_sessao_sec) por sessão\n→ apenas fl_sessao_com_uso = true\n← campo na base: tempo_sessao_sec (float64)",
+          desc:"Média de segundos por sessão em que o usuário estava ativamente com o app em primeiro plano. Cresceu de 167 segundos em janeiro para 243 segundos em junho — sinal de que os usuários que permanecem estão descobrindo mais valor no produto ao longo do tempo.",
+          details:[
+            {label:"Como o campo é criado na base",text:"tempo_sessao_sec = SUM(engagement_time_msec) / 1000 por sessão, somando todos os eventos user_engagement. Tempo com app minimizado não é contabilizado."}
+          ]
+        },
+        {
+          id:"c9", name:"Funil de Conversão de Login",
+          formulaLabel:"Eventos rastreados",
+          formula:"login_screen_viewed → login → successful_login\n← flags: fl_login_screen, fl_login_attempt, fl_login_success",
+          desc:"Mostra a taxa de conversão em cada etapa do processo de autenticação: quantos dispositivos chegam à tela de login, quantos tentam autenticar e quantos completam com sucesso.",
+          details:[
+            {label:"Como os campos são criados na base",text:"fl_login_screen = true quando a sessão contém login_screen_viewed. fl_login_attempt = true quando contém login. fl_login_success = true quando contém successful_login. Todos calculados via LOGICAL_OR por sessão."},
+            {label:"Usuário elegível",text:"fl_usuario_elegivel = fl_login_success. Essa flag é a base para qualquer análise que exige conta autenticada.",callout:"info"}
+          ]
+        }
       ]
     },
     {
       id: "adocao", name: "Adoção", color: "#0C7A4E",
       cards: [
-        { id:"c10", name:"Volume de Uploads por Tipo", formulaLabel:"Eventos GA4", formula:"file_upload_image | file_upload_video | file_upload_document | file_upload_audio", desc:"Quantidade de arquivos enviados para a nuvem, segmentados por tipo. Mostra quais funcionalidades do app estão sendo efetivamente usadas.", details:[{label:"Colunas na tabela",text:"qtd_upload_image · qtd_upload_video · qtd_upload_document · qtd_upload_audio · qtd_upload_total — todas em fact_cloud_behavior."}] },
-        { id:"c11", name:"Volume de Downloads por Tipo", formulaLabel:"Eventos GA4", formula:"file_download_image | file_download_video | file_download_document", desc:"Quantidade de arquivos baixados do EXA Cloud para o dispositivo. Complementa os uploads — mostra se os usuários também recuperam o que armazenam.", details:[{label:"Colunas na tabela",text:"qtd_download_image · qtd_download_video · qtd_download_document · qtd_download_total · download_size_bytes — todas em fact_cloud_behavior."}] },
-        { id:"c12", name:"Espaço Consumido (GB)", formulaLabel:"Composição", formula:"SUM(upload_size_mb) convertido para GB — acumulado mensal", desc:"Volume total de dados armazenados na nuvem pelo conjunto de usuários no período. Registrado via parâmetro total_upload_size_mb enviado junto ao evento de upload.", details:[{label:"Coluna na tabela",text:"upload_size_mb (float64) em fact_cloud_behavior."},{label:"Atenção ao mês corrente",text:"O valor do mês corrente é parcial — a extração cobre apenas os dias já processados. Não comparar com meses anteriores completos.",callout:"warn"}] }
+        {
+          id:"c10", name:"Uploads por Tipo de Arquivo",
+          formulaLabel:"Medidas",
+          formula:"SUM(qtd_upload_image)    ← file_upload_image\nSUM(qtd_upload_video)    ← file_upload_video\nSUM(qtd_upload_document) ← file_upload_document\nSUM(qtd_upload_audio)    ← file_upload_audio",
+          desc:"Quantos arquivos os usuários enviaram para a nuvem, separados por tipo. Imagens representam ~85% do volume total — o EXA Cloud é usado principalmente como backup de fotos. Pico em maio/2026 com ~490 mil uploads. Documentos crescendo desde março, indicando que os usuários estão expandindo o uso além de fotos.",
+          details:[
+            {label:"Como os campos são criados na base",text:"Cada campo conta os eventos correspondentes por sessão via COUNTIF no Dataform. qtd_upload_total é a soma de todos os tipos. Os eventos file_upload_complete e upload_completed também são contabilizados no total mas não têm campo de tipo específico."}
+          ]
+        },
+        {
+          id:"c11", name:"Downloads por Tipo de Arquivo",
+          formulaLabel:"Medidas",
+          formula:"SUM(qtd_download_image)    ← file_download_image\nSUM(qtd_download_video)    ← file_download_video\nSUM(qtd_download_document) ← file_download_document",
+          desc:"Quantos arquivos os usuários baixaram do EXA Cloud para o dispositivo. O volume é bem menor que o de uploads — a razão em GB é de 18,5×. Imagens lideram, com documentos ganhando participação a partir de março.",
+          details:[
+            {label:"Como os campos são criados na base",text:"Mesmo padrão dos uploads — COUNTIF por evento por sessão. qtd_download_total soma todos os tipos."}
+          ]
+        },
+        {
+          id:"c12", name:"Espaço Consumido em GB",
+          formulaLabel:"Medidas",
+          formula:"Upload em GB:   SUM(upload_size_mb) / 1024\nDownload em GB: SUM(download_size_bytes) / 1073741824",
+          desc:"Volume real de dados em gigabytes que os usuários enviaram e baixaram. Upload acumulado no período: 9.596 GB. Download: 517,5 GB. A razão de 18,5× revela que o app é usado como arquivo — os usuários armazenam muito mais do que acessam.",
+          details:[
+            {label:"Como os campos são criados na base",text:"upload_size_mb captura o parâmetro total_upload_size_mb enviado pelo app junto ao evento de upload. download_size_bytes soma o parâmetro file_size dos eventos de download por sessão."},
+            {label:"Mês corrente parcial",text:"O valor de junho sempre aparece menor — o mês está incompleto na extração. Não comparar com meses anteriores fechados.",callout:"info"}
+          ]
+        }
       ]
     },
     {
       id: "retencao", name: "Retenção", color: "#B45309",
       cards: [
-        { id:"c13", name:"Base Instalada Real Acumulada", formulaLabel:"Lógica", formula:"Σ first_open (Android GA4 + iOS loja) − Σ app_remove (Android GA4) − Σ Desinstalacoes_IOS (loja)\n→ acumulado dia a dia desde o início do rastreamento", desc:"Estoque atual de dispositivos com o EXA Cloud instalado. Cresce com novas instalações e diminui com desinstalações. É a penetração líquida do produto.", details:[{label:"Tabela de origem",text:"aggr_base_instalada_cloud — colunas base_instalada_real_acumulada, base_instalada_real_acumulada_android e base_instalada_real_acumulada_ios. Calculadas com window function acumulativa (SUM OVER ORDER BY dia)."},{label:"Por que 'Real'?",text:"Diferencia-se de somar downloads históricos. O cálculo desconta desinstalações, produzindo o estoque líquido — dispositivos que ainda têm o app instalado."},{label:"Dependência da planilha iOS",text:"Como a planilha iOS é atualizada manualmente, defasagens nela afetam diretamente o indicador para o segmento iOS.",callout:"info"}] },
-        { id:"c14", name:"Adoção de Auto-Sync", formulaLabel:"Flag GA4", formula:"fl_auto_sync_ativado ← settings_auto_upload_enabled | sync_auto_enabled", desc:"Percentual de usuários que ativaram a sincronização automática — funcionalidade que realiza backup contínuo dos arquivos sem interação manual.", details:[{label:"Coluna na tabela",text:"fl_auto_sync_ativado (boolean) em fact_cloud_behavior. Verdadeiro se a sessão contiver ao menos um dos eventos de ativação do sync automático."}] },
-        { id:"c15", name:"Pastas Criadas", formulaLabel:"Evento GA4", formula:"SUM(qtd_pastas_criadas) ← folder_created", desc:"Total de pastas criadas pelos usuários para organizar arquivos na nuvem. Usuários que criam pastas demonstram intenção de uso estruturado e contínuo.", details:[{label:"Coluna na tabela",text:"qtd_pastas_criadas (int64) em fact_cloud_behavior — contagem do evento folder_created por sessão."}] },
-        { id:"c16", name:"Método de Login", formulaLabel:"Parâmetro GA4", formula:"event_params[key='method'] → onboarding | keycloak | apple | google | post | manual", desc:"Distribuição dos métodos usados para autenticar no EXA Cloud. Extraído do payload do evento de login e armazenado na coluna login_method.", details:[{label:"Coluna na tabela",text:"login_method (string) em fact_cloud_behavior. Quando uma sessão tem múltiplas tentativas com métodos diferentes, é armazenado o último valor via MAX(login_method)."}] },
-        { id:"c17", name:"Segmentação de Recência", formulaLabel:"Lógica", formula:"DATE_DIFF(data_referencia, última sessão do usuário, DAY)\n→ faixas: ≤30d | 31-60d | 61-90d | 91-120d | 121-150d | 151-180d | 181+d", desc:"Classifica cada usuário instalado pelo tempo desde sua última sessão. Calculado diariamente para todos os usuários da base instalada.", details:[{label:"Colunas na tabela",text:"instalados_sessao_ate_30d · instalados_sessao_31_60d · instalados_sessao_61_90d · instalados_sessao_91_120d · instalados_sessao_121_150d · instalados_sessao_151_180d · instalados_sessao_181_plus — todas em aggr_base_instalada_cloud."},{label:"Como as faixas são calculadas",text:"Para cada dia, o sistema verifica a última data de sessão de cada usuário ainda instalado e calcula a diferença em dias. Usuários sem nenhum registro de sessão ficam na faixa 181+."}] }
+        {
+          id:"c13", name:"Base Instalada Acumulada",
+          formulaLabel:"Como é calculado",
+          formula:"Σ instalações (Android GA4 + iOS loja) − Σ desinstalações (Android GA4 + iOS loja)\n→ acumulado dia a dia · tabela: aggr_base_instalada_cloud",
+          desc:"Estoque acumulado de dispositivos que instalaram o EXA Cloud desde o lançamento, descontando as desinstalações. Calculado como uma conta corrente: cada instalação soma +1, cada desinstalação subtrai -1. Chegou a 19,2 mil em maio/2026. Android domina — iOS teve penetração mínima no período.",
+          details:[
+            {label:"Diferença entre Base Instalada e Instalações mensais",text:"Instalações mensais (First Open) conta novos dispositivos que instalaram no mês. Base Instalada Acumulada é o estoque total desde o lançamento — inclui todos os meses anteriores, descontando quem desinstalou."},
+            {label:"Fontes combinadas",text:"Android: instalações via evento first_open no GA4, desinstalações via app_remove. iOS: instalações e desinstalações via planilha do App Store Connect — o iPhone não permite que o app envie eventos no momento da remoção."},
+            {label:"Dependência da planilha iOS",text:"Se a planilha iOS estiver desatualizada, a base instalada iOS fica inflada porque desinstalações não são descontadas.",callout:"info"}
+          ]
+        },
+        {
+          id:"c14", name:"Auto-Sync — ON vs OFF",
+          formulaLabel:"Medidas",
+          formula:"Sync ON:\nCOUNT_DISTINCT(IF(fl_auto_sync_status = 'ON' AND fl_sessao_com_uso = TRUE, user_pseudo_id, NULL))\n\nSync OFF:\nCOUNT_DISTINCT(IF(fl_auto_sync_status = 'OFF' AND fl_sessao_com_uso = TRUE, user_pseudo_id, NULL))\n\n% sem Auto-Sync:\nSync OFF / COUNT_DISTINCT(IF(fl_sessao_com_uso, user_pseudo_id, NULL))",
+          desc:"Quantos usuários ativos têm o backup automático ligado versus desligado. O universo é todos os usuários com sessão de uso real (fl_sessao_com_uso). Resultado no período: 99,18% dos usuários ativos nunca ativaram o Auto-Sync. Apenas 1.010 usuários únicos usaram a funcionalidade.",
+          details:[
+            {label:"Como o campo fl_auto_sync_status é criado",text:"fl_auto_sync_status = 'ON' quando a sessão contém o evento settings_auto_upload_enabled ou sync_auto_enabled. 'OFF' para todas as demais sessões. Campo string calculado diretamente no SELECT do Dataform — facilita filtros e agrupamentos no Looker Studio sem necessidade de CASE."},
+            {label:"Por que fl_sessao_com_uso é obrigatório",text:"Sem esse filtro, sessões onde o auto-sync rodou automaticamente em background seriam contadas como 'Sync ON' — inflando o número. O filtro garante que contamos apenas usuários que estavam ativamente usando o app.",callout:"ok"},
+            {label:"O que o gráfico mensal mostra",text:"'Auto-Sync — adoção mensal (ON vs OFF)' exibe barras empilhadas mês a mês. O azul (ON) fica na base, consistentemente pequeno. O cinza (OFF) domina todos os meses — o problema não é pontual, é estrutural."},
+            {label:"Oportunidade de produto",text:"Para um app de backup em nuvem, 99,18% sem backup automático é o dado mais importante do dashboard. Usuário com Auto-Sync ativo não precisa lembrar de abrir o app — o backup acontece sozinho. Isso cria hábito passivo de uso e reduz churn."}
+          ]
+        },
+        {
+          id:"c15", name:"Engajados com Download",
+          formulaLabel:"Medida",
+          formula:"COUNT_DISTINCT(IF(fl_engajamento_download, user_pseudo_id, NULL))\n← campo na base: fl_engajamento_download (boolean)",
+          desc:"Quantos dispositivos únicos baixaram ao menos um arquivo no período. Resultado: 454 usuários — bem menor que os 2.474 com upload. Confirma que o app é usado principalmente para armazenar, não para acessar arquivos ativamente.",
+          details:[
+            {label:"Como o campo é criado na base",text:"fl_engajamento_download = true quando qtd_download_total > 0 na sessão. qtd_download_total soma eventos file_download_image, file_download_video, file_download_document e file_download_generic."}
+          ]
+        },
+        {
+          id:"c16", name:"Engajados Auto-Sync ON",
+          formulaLabel:"Medida",
+          formula:"COUNT_DISTINCT(IF(fl_auto_sync_status = 'ON' AND fl_sessao_com_uso = TRUE, user_pseudo_id, NULL))\n← campos na base: fl_auto_sync_status (string), fl_sessao_com_uso (boolean)",
+          desc:"Quantos usuários únicos tinham o Auto-Sync ativo em sessões com uso real no período. Resultado: 1.010 usuários — 21,8% dos usuários engajados com features.",
+          details:[
+            {label:"Como o campo é criado na base",text:"fl_auto_sync_status = 'ON' quando a sessão contém settings_auto_upload_enabled ou sync_auto_enabled. O filtro AND fl_sessao_com_uso = TRUE garante que contamos apenas sessões com uso ativo."}
+          ]
+        },
+        {
+          id:"c17", name:"Segmentação de Recência",
+          formulaLabel:"Como é calculado",
+          formula:"DATE_DIFF(data_referencia, última sessão do usuário, DAY)\n→ faixas: ≤30d | 31-60d | 61-90d | 91-120d | 121-150d | 151-180d | 181+d\n← tabela: aggr_base_instalada_cloud",
+          desc:"Classifica cada usuário instalado pelo tempo desde sua última sessão. Calculado diariamente para toda a base instalada — não só quem usou naquele dia. Permite dimensionar campanhas de reativação com precisão.",
+          details:[
+            {label:"Como ler as faixas",text:"Até 30 dias: usuários ativos. De 31 a 90 dias: dormentes recentes, ainda receptíveis a reativação. De 91 a 180 dias: reativação difícil. Acima de 181 dias: provavelmente perdidos para o produto."},
+            {label:"Usuários sem nenhuma sessão",text:"Quem instalou mas nunca gerou uma sessão com uso real fica automaticamente na faixa 181+. São instalações que nunca viraram uso."}
+          ]
+        }
       ]
     },
     {
       id: "infra", name: "Infra & Dados", color: "#475569",
       cards: [
-        { id:"c18", name:"Processamento Incremental — Watermark", formulaLabel:"Lógica", formula:"v_watermark = MAX(event_date) − 3 dias", desc:"A tabela fact_cloud_behavior é atualizada diariamente, reprocessando os últimos 3 dias para capturar eventos que chegam com atraso ao BigQuery — o GA4 pode enviar eventos com até 72h de defasagem em dispositivos offline.", details:[{label:"Impacto nos dados do dashboard",text:"Os últimos 2–3 dias visíveis podem ter números levemente subnotificados. Para análises comparativas, use períodos com pelo menos 3 dias de defasagem em relação à data de hoje."}] },
-        { id:"c19", name:"Chave Primária & Integridade", formulaLabel:"Geração", formula:"FARM_FINGERPRINT(event_date + user_pseudo_id + user_id + session_id)", desc:"Cada linha da tabela representa uma sessão única de um dispositivo em um dia. Uma validação automática roda após cada processamento — se encontrar duplicatas, o job falha antes de atualizar o dashboard.", details:[{label:"Garantia para as métricas",text:"Sem esse controle, uma falha de reprocessamento poderia duplicar sessões e inflar métricas como MAU, DAU e contagem de uploads. O ASSERT automático é a salvaguarda que impede isso de chegar ao dashboard."}] },
-        { id:"c20", name:"Blend de Dados — Looker Studio", formulaLabel:"Configuração", formula:"aggr_base_instalada_cloud (BigQuery)\nLEFT JOIN Downloads Loja (Planilha)\nON data_referencia = Data", desc:"Alguns gráficos combinam dados do BigQuery com a planilha de loja via recurso de Combinar dados do Looker Studio.", details:[{label:"Indicadores que dependem do blend",text:"Base Instalada iOS, Desinstalações iOS, Total Downloads. Se a planilha não for atualizada, esses indicadores ficam defasados."},{label:"Indicadores independentes",text:"MAU, DAU, Funil de Login, Uploads, Tempo de Sessão, Recência. Alimentados exclusivamente pelo BigQuery e atualizados automaticamente."},{label:"Dimensão temporal",text:"Todos os gráficos mensais usam year_month_date (DATE_TRUNC do mês) — garante agrupamento correto por mês no Looker Studio.",callout:"ok"}] },
-        { id:"c21", name:"Limitação — user_pseudo_id duplicados", formulaLabel:"Problema identificado", formula:"user_pseudo_id ≠ usuário único\n← reinstalação ou limpeza de cache gera novo ID", desc:"O GA4 atribui um user_pseudo_id por instalação do app no dispositivo. Quando o usuário reinstala o app ou limpa o cache, um novo ID é gerado para o mesmo dispositivo físico — o que faz a mesma pessoa aparecer como um novo usuário nas métricas.", details:[{label:"Impacto nos indicadores",text:"MAU, DAU e Total Users ficam inflados. A análise de cohort de jun/2026 mostrou apenas 8,5% de sobreposição de IDs entre períodos consecutivos normais — o que indica volume relevante de IDs duplicados por dispositivo físico."},{label:"Como identificar a magnitude",text:"Cruzar user_pseudo_id com user_id (disponível após login). Se um user_id tiver múltiplos user_pseudo_id distintos ao longo do tempo, cada um foi contado como usuário separado."},{label:"Status",text:"Problema em investigação pelo time de backend — relacionado ao bug de User ID reportado em mai/2026. Indicadores de usuário únicos devem ser lidos com cautela até a correção ser implementada.",callout:"warn"}] }
+        {
+          id:"c18", name:"Pipeline — Processamento Incremental",
+          formulaLabel:"Como funciona",
+          formula:"v_watermark = MAX(event_date) − 3 dias\n→ reprocessa os últimos 3 dias a cada rodada diária",
+          desc:"O pipeline que alimenta o dashboard roda diariamente e sempre reprocessa os últimos 3 dias — não apenas o dia atual. Isso existe porque o GA4 pode enviar eventos com atraso: um usuário que ficou sem internet tem seus eventos chegando ao BigQuery até 72 horas depois.",
+          details:[
+            {label:"Impacto nos dados",text:"Os últimos 2–3 dias visíveis nos gráficos podem ter números levemente menores que o real. Para comparações entre períodos, use intervalos com pelo menos 3 dias de distância da data atual."}
+          ]
+        },
+        {
+          id:"c19", name:"Integridade — Chave Única",
+          formulaLabel:"Como funciona",
+          formula:"FARM_FINGERPRINT(event_date + user_pseudo_id + user_id + session_id)\n→ ASSERT COUNT(duplicatas) = 0 após cada processamento",
+          desc:"Cada linha da fact_cloud_behavior representa uma sessão única de um dispositivo em um dia. Uma validação automática roda após cada atualização — se encontrar linhas duplicadas, o pipeline falha e o dashboard não é atualizado até a correção.",
+          details:[
+            {label:"Por que isso importa",text:"Sem esse controle, um reprocessamento com falha poderia contar a mesma sessão duas vezes, inflando MAU, DAU e todos os contadores de eventos."}
+          ]
+        },
+        {
+          id:"c20", name:"Blend de Fontes — Looker Studio",
+          formulaLabel:"Configuração",
+          formula:"fact_cloud_behavior (BigQuery)\n+ aggr_base_instalada_cloud (BigQuery)\n+ Planilha de loja (Google Sheets)\n→ unidos por data no Looker Studio",
+          desc:"Alguns indicadores do dashboard combinam mais de uma fonte de dados. O Looker Studio faz essa combinação via blend — une as tabelas pela data e permite que um mesmo gráfico mostre dados do GA4 e da loja lado a lado.",
+          details:[
+            {label:"Indicadores que dependem do blend",text:"Downloads totais, Base Instalada iOS, Desinstalações iOS. Se a planilha de loja estiver desatualizada, esses três indicadores ficam com dados defasados."},
+            {label:"Indicadores independentes",text:"MAU, DAU, Funil, Uploads, Downloads, Tempo de Sessão, Auto-Sync — todos vêm exclusivamente do BigQuery e se atualizam automaticamente a cada rodada do pipeline.",callout:"ok"}
+          ]
+        },
+        {
+          id:"c21", name:"Limitação — user_pseudo_id",
+          formulaLabel:"Problema conhecido",
+          formula:"user_pseudo_id ≠ usuário único\n← reinstalação ou limpeza de cache gera novo ID para o mesmo dispositivo",
+          desc:"O GA4 atribui um identificador por instalação — não por dispositivo físico. Reinstalar o app ou limpar o cache gera um novo ID, fazendo a mesma pessoa aparecer como um usuário diferente nas métricas de contagem.",
+          details:[
+            {label:"Impacto nos indicadores",text:"MAU, DAU, Total Users e todos os COUNT_DISTINCT de user_pseudo_id ficam potencialmente inflados. Análise de cohort realizada em junho/2026 mostrou 8,5% de sobreposição de IDs entre períodos consecutivos normais."},
+            {label:"Mitigação",text:"Para análises de retenção e reativação, cruzar user_pseudo_id com user_id (disponível após login) é o caminho mais preciso. Um user_id com múltiplos user_pseudo_id ao longo do tempo representa reinstalações do mesmo usuário.",callout:"info"}
+          ]
+        }
       ]
     }
   ]
